@@ -1,7 +1,8 @@
-#' Bring constrained model parameters in list form to unconstrained parameters in vector form
-#' @param thetaList Constrained model parameters in list form
-#' @param controls A list of controls
-#' @return Unconstrained model parameters in vector form
+#' Brings constrained model parameters in list form to unconstrained parameters in vector form.
+#' @param thetaList Constrained model parameters in list form.
+#' @param controls A list of controls.
+#' @return Unconstrained model parameters in vector form.
+
 thetaList2thetaUncon = function(thetaList,controls){
   if(controls[["model"]]=="HMM"){
     gammasUncon = Gamma2gammasUncon(thetaList[["Gamma"]])
@@ -17,7 +18,7 @@ thetaList2thetaUncon = function(thetaList,controls){
   if(controls[["model"]]=="HHMM"){
     gammasUncon      = Gamma2gammasUncon(thetaList[["Gamma"]])
     gammasUncon_star = vector()
-    for(s in seq_len(controls[["states"]][1] )){
+    for(s in seq_len(controls[["states"]][1])){
       gammasUncon_star = c(gammasUncon_star,Gamma2gammasUncon(thetaList[["Gammas_star"]][[s]]))
     }
     musUncon      = muCon2muUncon(thetaList[["mus"]],link=(controls[["sdds"]][1] == "gamma"))

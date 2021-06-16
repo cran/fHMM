@@ -59,7 +59,7 @@ check_estimation = function(mods,lls,data,hessian,controls){
              "thetaCon"   = thetaConOrdered,
              "thetaList"  = thetaListOrdered,
              "AIC"        = comp_AIC(-mod[["minimum"]]),
-             "BIC"        = comp_BIC(prod(dim(t(data[["logReturns"]]))),-mod[["minimum"]]),
+             "BIC"        = comp_BIC(prod(dim(t(data[["data"]]))),-mod[["minimum"]]),
              "hessian"    = hessianOrdered,
              "mods"       = mods,
              "lls"        = lls
@@ -96,6 +96,12 @@ check_estimation = function(mods,lls,data,hessian,controls){
                         suppressWarnings(sprintf("%.4g",lb)),
                         suppressWarnings(sprintf("%.4g",ub)))
           colnames(table) = c("true","est","rel. bias",names(ci)[1],names(ci)[3])
+          
+          ### remove
+          estimates_table = cbind(true,est,rbias,lb,ub)
+          rownames(estimates_table) = parameter_names(controls,all=FALSE)
+          check_saving(object = estimates_table, filetype = "rds", controls = controls)
+          
         } else {
           table = cbind(sprintf("%.4g",est),
                         suppressWarnings(sprintf("%.4g",lb)),

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Lennart Oelschläger" />
+
+<meta name="date" content="2021-06-16" />
+
+<title>How to specify a model in fHMM?</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">How to specify a model in fHMM?</h1>
+<h4 class="author">Lennart Oelschläger</h4>
+<h4 class="date">2021-06-16</h4>
+
+
+
+<p>To specify a model in <strong>fHMM</strong>, you only need to define the named list <code>controls</code> and pass it to <code>fit_hmm</code>, i.e.</p>
+<ol style="list-style-type: decimal">
+<li><p>define <code>controls = list(&lt;parameters&gt;)</code> and</p></li>
+<li><p>call <code>fit_hmm(controls)</code> for estimation.</p></li>
+</ol>
+<p>The list <code>controls</code> can contain the following parameters. You can either specify none, all, or selected parameters. Unspecified parameters are set to default values.</p>
+<div id="path" class="section level2">
+<h2><code>path</code></h2>
+<p>A character, setting the path where model results get saved. The default is <code>path = tempdir()</code> (the path of the per-session temporary directory). We recommend to set a path to your current working directory, e.g. <code>path = &quot;.&quot;</code>.</p>
+</div>
+<div id="id" class="section level2">
+<h2><code>id</code></h2>
+<p>A character, which identifies a model. The default is <code>id = &quot;test&quot;</code>. We recommend to set a meaningful identification, e.g. <code>id = &quot;dax_hmm_2_states&quot;</code>.</p>
+</div>
+<div id="model" class="section level2">
+<h2><code>model</code></h2>
+<p>This control determines the type model that you want to estimate and can be one of</p>
+<ul>
+<li><p><code>&quot;hmm&quot;</code> (to estimate a hidden Markov model),</p></li>
+<li><p><code>&quot;hhmm&quot;</code> (to estimate a hierarchical hidden Markov model).</p></li>
+</ul>
+<p>The default is <code>model = &quot;hmm&quot;</code>.</p>
+</div>
+<div id="states" class="section level2">
+<h2><code>states</code></h2>
+<p>This control determines the number of states and depends on the control <code>model</code>.</p>
+<ul>
+<li><p>If <code>model = &quot;hmm&quot;</code>, <code>states</code> is an integer. If <code>states = x</code>, a hidden Marko model with <code>x</code> states is estimated.</p></li>
+<li><p>If <code>model = &quot;hhmm&quot;</code>, <code>states</code> is a numeric vector of length two. If <code>states = c(x,y)</code>, a hierarchical hidden Markov model with <code>x</code> coarse-scale and <code>y</code> fine-scale states is estimated.</p></li>
+</ul>
+<p>The default is <code>states = 2</code>, which defines a 2-state hidden Markov model.</p>
+</div>
+<div id="sdds" class="section level2">
+<h2><code>sdds</code></h2>
+<p>This control determines the state-depenent distributions and depends on the control <code>model</code>.</p>
+<ul>
+<li><p>If <code>model = &quot;hmm&quot;</code>, <code>states</code> is one of the following values.</p></li>
+<li><p>If <code>model = &quot;hhmm&quot;</code>, <code>states</code> is a vector of length two, containing the following values. The first entry defines the state-depenent distribution for the coarse scale, the second entry for the fine scale, respectively.</p></li>
+</ul>
+<p>The following state-depenent distributions can be defined:</p>
+<ul>
+<li><p><code>&quot;t&quot;</code>, the t-distribution,</p></li>
+<li><p><code>&quot;t(x)&quot;</code>, the t-distribution with <code>x</code> fixed degrees of freedom (<code>x = Inf</code> yields the normal distribution),</p></li>
+<li><p><code>&quot;gamma&quot;</code>, the gamma distribution.</p></li>
+</ul>
+<p>For example, <code>sdds = c(&quot;t&quot;,&quot;t(1)&quot;)</code> defines the t-distribution for the coarse scale (degrees of freedom get estimated) and the t-distribution with one degree of freedom for the fine scale.</p>
+<p>The default is <code>sdds = &quot;t&quot;</code>, which defines state-dependent t-distributions.</p>
+</div>
+<div id="horizon" class="section level2">
+<h2><code>horizon</code></h2>
+<p>This control determines the length of the time horizon and depends on the control <code>model</code>.</p>
+<ul>
+<li><p>If <code>model = &quot;hmm&quot;</code>, <code>horizon</code> is an integer and determines the length of the time horizon for simulated data.</p></li>
+<li><p>If <code>model = &quot;hhmm&quot;</code>, <code>horizon</code> is a vector of length two. The first entry is numeric and defines the time horizon for the coarse scale for simulated data. The second entry defines the time horizon for the fine scale for simulated data and for empirical data and can be either numeric or one of</p></li>
+<li><p><code>&quot;w&quot;</code> for weekly fine-scale chunks,</p></li>
+<li><p><code>&quot;m&quot;</code> for monthly fine-scale chunks,</p></li>
+<li><p><code>&quot;q&quot;</code> for quarterly fine-scale chunks,</p></li>
+<li><p><code>&quot;y&quot;</code> for yearly fine-scale chunks.</p></li>
+</ul>
+<p>The default is <code>horizon = 1000</code>, which simulates 1000 data points from a hidden Markov model.</p>
+</div>
+<div id="data" class="section level2">
+<h2><code>data</code></h2>
+<p>A list which contains the following controls that specify the processing of data. If <code>data = NA</code> (the default), data gets simulated.</p>
+<div id="source" class="section level3">
+<h3><code>source</code></h3>
+<p>Either a character (if <code>model = &quot;hmm&quot;</code>) or a character vector of length 2 (if <code>model = &quot;hhmm&quot;</code>), containing the file names of the empirical data.</p>
+<ul>
+<li><p>If <code>source = NA</code> or <code>source = c(NA,NA)</code>, respectively, data is simulated.</p></li>
+<li><p>If <code>source = &quot;x&quot;</code>, data “x.csv” in folder “<code>path</code>/data” is modeled by a HMM.</p></li>
+<li><p>If <code>source = c(&quot;x&quot;,&quot;y&quot;)</code>, data “x.csv” (type determined by <code>cs_type</code>) on the coarse scale and data “y.csv” in folder “<code>path</code>/data” on the fine scale is modeled by a HHMM.</p></li>
+</ul>
+</div>
+<div id="column" class="section level3">
+<h3><code>column</code></h3>
+<p>Either a character (if <code>model = &quot;hmm&quot;</code>) or a character vector of length 2 (if <code>model = &quot;hhmm&quot;</code>), containing the names of the desired columns of <code>source</code>.</p>
+</div>
+<div id="truncate" class="section level3">
+<h3><code>truncate</code></h3>
+<p>A vector of length 2, containing lower and upper date limits (each in format <code>&quot;YYYY-MM-DD&quot;</code>) to select a subset of the empirical data (neither, one or both limits can be specified).</p>
+<p>The default is <code>truncate = c(NA,NA)</code>, i.e. no limits get specified.</p>
+</div>
+<div id="cs_transform" class="section level3">
+<h3><code>cs_transform</code></h3>
+<p>A character, determining the transformation of empirical coarse-scale data in hierarchical hidden Markov models.</p>
+<p>The character has to be a function of <code>x</code>, where <code>x</code> is the corresponding fine-scale data. The function must concentrate <code>x</code> into a single value.</p>
+<p>For example,</p>
+<ul>
+<li><p><code>cs_transform = &quot;mean(x)&quot;</code> defines the mean of the fine-scale data as the coarse-scale observation,</p></li>
+<li><p><code>cs_transform = &quot;mean(abs(x))&quot;</code> defines the mean of the absolute values of the fine-scale data as the coarse-scale observation,</p></li>
+<li><p><code>cs_transform = &quot;sum(abs(x))&quot;</code> defines the sum of the absolute values of the fine-scale data as the coarse-scale observation,</p></li>
+<li><p><code>cs_transform = &quot;(tail(x,1)-head(x,1))/head(x,1)&quot;</code> defines the relative change of the first and the last fine-scale observation as the coarse-scale observation.</p></li>
+</ul>
+<p>Practically, any transformation can be defined.</p>
+</div>
+<div id="log_returns" class="section level3">
+<h3><code>log_returns</code></h3>
+<p>Either a boolean (if <code>model = &quot;hmm&quot;</code>) or a boolean vector of length 2 (if <code>model = &quot;hhmm&quot;</code>), determining whether empirical data should be transformed to log-returns.</p>
+</div>
+</div>
+<div id="fit" class="section level2">
+<h2><code>fit</code></h2>
+<p>A list which contains the following controls that specify the estimation.</p>
+<div id="runs" class="section level3">
+<h3><code>runs</code></h3>
+<p>A numeric value, setting the number of optimization runs.</p>
+<p>The default is <code>runs = 100</code>.</p>
+</div>
+<div id="at_true" class="section level3">
+<h3><code>at_true</code></h3>
+<p>A boolean, determining whether the optimization is initialized at the true parameter values.</p>
+<p>Only for simulated data, sets <code>runs = 1</code> and <code>accept = &quot;all&quot;</code>.</p>
+<p>The default is <code>at_true = FALSE</code>.</p>
+</div>
+<div id="seed" class="section level3">
+<h3><code>seed</code></h3>
+<p>A numeric value, setting a seed for the simulation and the optimization.</p>
+<p>Per default, no seed is set.</p>
+</div>
+<div id="accept" class="section level3">
+<h3><code>accept</code></h3>
+<p>Either a numeric vector (containing acceptable exit codes of the <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/nlm.html">nlm optimization</a>) or the character <code>&quot;all&quot;</code> (accepting all codes).</p>
+<p>The default is <code>accept = c(1,2)</code>.</p>
+</div>
+<div id="print.level" class="section level3">
+<h3><code>print.level</code></h3>
+<p>Passed on to <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/nlm.html">nlm</a>.</p>
+<p>The default is <code>print_level = 0</code>.</p>
+</div>
+<div id="gradtol" class="section level3">
+<h3><code>gradtol</code></h3>
+<p>Passed on to <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/nlm.html">nlm</a>.</p>
+<p>The default is <code>gradtol = 1e-6</code>.</p>
+</div>
+<div id="stepmax" class="section level3">
+<h3><code>stepmax</code></h3>
+<p>Passed on to <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/nlm.html">nlm</a>.</p>
+<p>The default is <code>stepmax = 1</code>.</p>
+</div>
+<div id="steptol" class="section level3">
+<h3><code>steptol</code></h3>
+<p>Passed on to <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/nlm.html">nlm</a>.</p>
+<p>The default is <code>steptol = 1e-6</code>.</p>
+</div>
+<div id="iterlim" class="section level3">
+<h3><code>iterlim</code></h3>
+<p>Passed on to <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/nlm.html">nlm</a>.</p>
+<p>The default is <code>iterlim = 200</code>.</p>
+</div>
+<div id="scale_par" class="section level3">
+<h3><code>scale_par</code></h3>
+<p>Either a numeric (if <code>model = &quot;hmm&quot;</code>) or a numeric vector of length 2 (if <code>model = &quot;hhmm&quot;</code>), scaling the model parameters in a simulation on the coarse and fine scale, respectively.</p>
+<p>The default is <code>scale_par = 1</code>, i.e. the model parameters for simulation do not get scaled.</p>
+</div>
+</div>
+<div id="results" class="section level2">
+<h2><code>results</code></h2>
+<p>A list which contains the following controls that specify the output.</p>
+<div id="overwrite" class="section level3">
+<h3><code>overwrite</code></h3>
+<p>A boolean, determining whether overwriting of existing results (on the same <code>id</code>) is allowed. It is set to <code>TRUE</code> if <code>id = &quot;test&quot;</code>.</p>
+<p>The default is <code>overwrite = FALSE</code>.</p>
+</div>
+<div id="ci_level" class="section level3">
+<h3><code>ci_level</code></h3>
+<p>A numeric value between 0 and 1, setting the level for the confidence intervals of the model parameters.</p>
+<p>The default is <code>ci_level = 0.95</code>.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

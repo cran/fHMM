@@ -10,6 +10,8 @@
 plot_sdd = function(controls,data,fit,decoding,colors){
   if(check_saving(name = "state_dependent_distributions", filetype = "pdf", controls = controls)){
     filename = paste0(controls[["path"]],"/models/",controls[["id"]],"/state_dependent_distributions.pdf")
+    
+    ### function to create SDD plots
     create_sdds_plot = function(nostates,mus,sigmas,dfs,sdd,x_range,c_xlim = FALSE,xlim = NULL,colors = NULL,llabel = NULL,ltitle = NULL,sdd_true_parm = NULL){
       lwd = 3
       x = seq(x_range[1]*ifelse(x_range[1]<0,1.5,0.5),x_range[2]*ifelse(x_range[2]>0,1.5,0.5),length.out=10000)
@@ -71,7 +73,8 @@ plot_sdd = function(controls,data,fit,decoding,colors){
         legend(legend=c("estimated","true"),col="grey",lwd=lwd,lty=c(1,2),cex=1.25,x="topright",bg=rgb(1,1,1,0.5))
       }
     }
-    if(controls[["model"]]=="HMM"){
+    
+    if(controls[["model"]]=="hmm"){
       pdf(file = filename, width=8, height=8)
         if(controls[["sim"]]){
           sdd_true_parm = list("mus"    = data[["thetaList0"]][["mus"]],
@@ -85,13 +88,13 @@ plot_sdd = function(controls,data,fit,decoding,colors){
                          sigmas        = fit[["thetaList"]][["sigmas"]],
                          dfs           = fit[["thetaList"]][["dfs"]],
                          sdd           = controls[["sdds"]][1],
-                         x_range       = c(min(data[["logReturns"]]),max(data[["logReturns"]])),
-                         colors        = colors[["HMM"]],
+                         x_range       = c(min(data[["data"]]),max(data[["data"]])),
+                         colors        = colors[["hmm"]],
                          llabel        = "State",
                          sdd_true_parm = sdd_true_parm)
       invisible(dev.off())
     }
-    if(controls[["model"]]=="HHMM"){
+    if(controls[["model"]]=="hhmm"){
       pdf(file = filename, width=8, height=8)
         if(controls[["sim"]]){
           sdd_true_parm = list("mus"    = data[["thetaList0"]][["mus"]],
@@ -105,8 +108,8 @@ plot_sdd = function(controls,data,fit,decoding,colors){
                          sigmas        = fit[["thetaList"]][["sigmas"]],
                          dfs           = fit[["thetaList"]][["dfs"]],
                          sdd           = controls[["sdds"]][1],
-                         x_range       = c(min(data[["logReturns"]][,1]),max(data[["logReturns"]][,1])),
-                         colors        = colors[["HHMM_cs"]],
+                         x_range       = c(min(data[["data"]][,1]),max(data[["data"]][,1])),
+                         colors        = colors[["hhmm_cs"]],
                          llabel        = "Coarse-scale state",
                          sdd_true_parm = sdd_true_parm)
         xlims = matrix(0,nrow=2,ncol=controls[["states"]][1])
@@ -116,7 +119,7 @@ plot_sdd = function(controls,data,fit,decoding,colors){
                                         sigmas   = fit[["thetaList"]][["sigmas_star"]][[cs]],
                                         dfs      = fit[["thetaList"]][["dfs_star"]][[cs]],
                                         sdd      = controls[["sdds"]][2],
-                                        x_range  = c(min(data[["logReturns"]][,-1],na.rm=TRUE),max(data[["logReturns"]][,-1],na.rm=TRUE)),
+                                        x_range  = c(min(data[["data"]][,-1],na.rm=TRUE),max(data[["data"]][,-1],na.rm=TRUE)),
                                         c_xlim   = TRUE) 
         }
         for(cs in seq_len(controls[["states"]][1])){
@@ -132,10 +135,10 @@ plot_sdd = function(controls,data,fit,decoding,colors){
                            sigmas        = fit[["thetaList"]][["sigmas_star"]][[cs]],
                            dfs           = fit[["thetaList"]][["dfs_star"]][[cs]],
                            sdd           = controls[["sdds"]][2],
-                           x_range       = c(min(data[["logReturns"]][,-1],na.rm=TRUE),max(data[["logReturns"]][,-1],na.rm=TRUE)),
+                           x_range       = c(min(data[["data"]][,-1],na.rm=TRUE),max(data[["data"]][,-1],na.rm=TRUE)),
                            c_xlim        = FALSE,
                            xlim          = c(min(xlims[1,]),max(xlims[2,])),
-                           colors        = colors[["HHMM_fs"]][[cs]],
+                           colors        = colors[["hhmm_fs"]][[cs]],
                            llabel        = "Fine-scale state",
                            ltitle        = paste("Coarse-scale state",cs),
                            sdd_true_parm = sdd_true_parm)

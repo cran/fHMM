@@ -18,16 +18,15 @@ max_likelihood = function(data,controls){
   mods = list() 
   
   ### define optimizer
-  if(controls[["model"]]=="HMM") target = nLL_hmm
-  if(controls[["model"]]=="HHMM") target = nLL_hhmm
+  if(controls[["model"]]=="hmm") target = nLL_hmm
+  if(controls[["model"]]=="hhmm") target = nLL_hhmm
   optimized = function(start_value){
     nlm_out = nlm(f = target,
                   p = start_value,
-                  observations = data[["logReturns"]],
+                  observations = data[["data"]],
                   controls = controls,
                   iterlim = controls[["fit"]][["iterlim"]],
                   steptol = controls[["fit"]][["steptol"]],
-                  stepmax = controls[["fit"]][["stepmax"]],
                   gradtol = controls[["fit"]][["gradtol"]],
                   print.level = controls[["fit"]][["print.level"]],
                   typsize = start_value,
@@ -59,10 +58,10 @@ max_likelihood = function(data,controls){
   ### adjust 'scale_par' based on method of moments estimates
   adjust_scale_par = function(controls,data){
     scale_par = c(NA,NA)
-    if(controls[["model"]]=="HMM"){
+    if(controls[["model"]]=="hmm"){
       scale_par[1] = mean(c(mean(data,na.rm="TRUE"),sd(data,na.rm="TRUE")))
     }
-    if(controls[["model"]]=="HHMM"){
+    if(controls[["model"]]=="hhmm"){
       scale_par[1] = mean(c(mean(data[,1],na.rm="TRUE"),sd(data[,1],na.rm="TRUE")))
       scale_par[2] = mean(c(mean(data[,-1],na.rm="TRUE"),sd(data[,-1],na.rm="TRUE")))
     }
@@ -71,13 +70,13 @@ max_likelihood = function(data,controls){
   
   ### select start values
   message("Selecting start values...",appendLF = FALSE)
-  controls[["fit"]][["scale_par"]] = adjust_scale_par(controls,data[["logReturns"]])
+  controls[["fit"]][["scale_par"]] = adjust_scale_par(controls,data[["data"]])
   start_values = generate_start_values(controls,runs)
   ll_at_start_values = rep(NA,runs)
   for(run in seq_len(runs)){
-    ll_at_start_values[run] = suppressWarnings(target(start_values[[run]],data[["logReturns"]],controls))
+    ll_at_start_values[run] = suppressWarnings(target(start_values[[run]],data[["data"]],controls))
   }
-  message("\r",sprintf("Start values selected %10s"," "))
+  message("\r",sprintf("Start values selected. %10s"," "))
   
   ### check fails
   fails = failed_start_values(ll_at_start_values)
@@ -115,24 +114,26 @@ max_likelihood = function(data,controls){
     pb$tick()
   }
   end = Sys.time()
-  message("Estimation finished")
+  message("Estimation finished.")
   if(all(is.na(lls))){
     stop(sprintf("%s (%s)",exception("F.4")[2],exception("F.4")[1]),call.=FALSE)
   } else {
+    ### estimation Info
+    writeLines(sprintf("- %s %s minute(s)","estimation time:",ceiling(difftime(end,start,units='mins'))))
+    if(!controls[["fit"]][["at_true"]]){
+      writeLines(sprintf("- %s %s out of %s runs","accepted runs:",sum(!is.na(lls)),length(lls)))
+    }
+    
     ### compute Hessian
     message("Computing the Hessian...",appendLF = FALSE)
     hessian = suppressWarnings(nlm(f = target,
                                    p = mods[[which.max(lls)]][["estimate"]],
-                                   observations = data[["logReturns"]],
+                                   observations = data[["data"]],
                                    controls = controls,
                                    iterlim = 1,
                                    hessian = TRUE,
                                    typsize = mods[[which.max(lls)]][["estimate"]])[["hessian"]])
-    message("\r",sprintf("Hessian computed %10s"," "))
-    writeLines(sprintf("%13-s %s minute(s)","run-time:",ceiling(difftime(end,start,units='mins'))))
-    if(!controls[["fit"]][["at_true"]]){
-      writeLines(sprintf("%13-s %s out of %s runs","accepted:",sum(!is.na(lls)),length(lls)))
-    }
+    message("\r",sprintf("Hessian computed. %10s"," "))
     
     ### create and return fit object
     fit = check_estimation(mods,lls,data,hessian,controls)

@@ -1,0 +1,92 @@
+#' Computing (pseudo-) residuals
+#'
+#' @description
+#' This function computes (pseudo-) residuals of an \code{fHMM_model} object.
+#'
+#' @param x
+#' An object of class \code{fHMM_model}.
+#' @param verbose
+#' Set to \code{TRUE} to print progress messages.
+#'
+#' @return
+#' An object of class \code{fHMM_model} with residuals included.
+#'
+#' @export
+#'
+#' @examples
+#' data(dax_model_3t)
+#' compute_residuals(dax_model_3t)
+#' @importFrom stats pt pgamma qnorm
+
+compute_residuals <- function(x, verbose = TRUE) {
+
+  ### check input
+  if (class(x) != "fHMM_model") {
+    stop("'x' must be of class 'fHMM_model'.")
+  }
+  if (!is.logical(verbose) || length(verbose) != 1) {
+    stop("'verbose' must be either TRUE or FALSE.")
+  }
+  if (is.null(x$decoding)) {
+    warning("Cannot compute residuals without decoding, please call 'decode_states()' first.")
+    return(x)
+  }
+
+  ### function that computes the residuals
+  cr <- function(data, mus, sigmas, dfs, sdd_name, decoding) {
+    stopifnot(length(data) == length(decoding))
+    out <- rep(NA, length(data))
+    for (t in seq_along(data)) {
+      if (sdd_name == "t") {
+        Fxt <- stats::pt(
+          q = (data[t] - mus[decoding[t]]) / sigmas[decoding[t]],
+          df = dfs[decoding[t]]
+        )
+      }
+      if (sdd_name == "gamma") {
+        Fxt <- stats::pgamma(
+          q = data[t],
+          shape = mus[decoding[t]]^2 / sigmas[decoding[t]]^2,
+          scale = sigmas[decoding[t]]^2 / mus[decoding[t]]
+        )
+      }
+      out[t] <- stats::qnorm(Fxt)
+    }
+    return(out)
+  }
+
+  ### compute residuals
+  par <- parUncon2par(x$estimate, x$data$controls)
+  if (!x$data$controls$hierarchy) {
+    residuals <- cr(
+      data = x$data$data, mus = par$mus, sigmas = par$sigmas,
+      dfs = par$dfs, sdd_name = x$data$controls$sdds[[1]]$name,
+      decoding = x$decoding
+    )
+  } else {
+    residuals <- matrix(NA, nrow = nrow(x$data$data), ncol = ncol(x$data$data))
+    residuals[, 1] <- cr(
+      data = x$data$data[, 1], mus = par$mus,
+      sigmas = par$sigmas, dfs = par$dfs,
+      sdd_name = x$data$controls$sdds[[1]]$name,
+      decoding = x$decoding[, 1]
+    )
+    for (t in seq_len(nrow(residuals))) {
+      curr <- x$decoding[t, 1]
+      residuals[t, -1] <- cr(
+        data = x$data$data[t, -1],
+        mus = par$mus_star[[curr]],
+        sigmas = par$sigmas_star[[curr]],
+        dfs = par$dfs_star[[curr]],
+        sdd_name = x$data$controls$sdds[[2]]$name,
+        decoding = x$decoding[t, -1]
+      )
+    }
+  }
+
+  ### save residuals in 'x' and return 'x'
+  if (verbose) message("Computed residuals")
+  class(residuals) <- "fHMM_residuals"
+  x$residuals <- residuals
+  return(x)
+}

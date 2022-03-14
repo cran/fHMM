@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Model estimation</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Model estimation</h1>
+
+
+
+<p>The {fHMM} package fits a hidden Markov model via the maximum-likelihood method, i.e. by numerically maximizing the likelihood function. This vignette<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> derives the likelihood formula, discusses challenges associated with the likelihood maximization and presents the model estimation workflow.</p>
+<div id="likelihood-evaluation-using-the-forward-algorithm" class="section level2">
+<h2>Likelihood evaluation using the forward algorithm</h2>
+<p>Deriving the likelihood function of an hidden Markov model is part of the hierarchical case, hence the following only discusses the general case.</p>
+<p>An HHMM can be treated as an HMM with two conditionally independent data streams; the coarse-scale observations on the one hand and the corresponding chunk of fine-scale observations connected to a fine-scale HMM on the other hand. To derive the likelihood of an HHMM, we start by computing the likelihood of each chunk of fine-scale observations being generated by each fine-scale HMM.</p>
+<p>To fit the <span class="math inline">\(i\)</span>-th fine-scale HMM, with model parameters <span class="math inline">\(\theta^{*(i)}=(\delta^{*(i)}, \Gamma^{*(i)},(f^{*(i,k)})_k)\)</span> to the <span class="math inline">\(t\)</span>-th chunk of fine-scale observations, which is denoted by <span class="math inline">\((X_{t,t^*})_{t^*}\)</span>, we consider the fine-scale forward probabilities <span class="math display">\[\begin{align*}
+\alpha^{*(i)}_{k,t^*}=f^{*(i)}(X^*_{t,1},\dots,X^*_{t,t^*}, S^*_{t,t^*}=k),
+\end{align*}\]</span> where <span class="math inline">\(t^*=1,\dots,T^*\)</span> and <span class="math inline">\(k=1,\dots,N^*\)</span>. Using the fine-scale forward probabilities, the fine-scale likelihoods can be obtained from the law of total probability as <span class="math display">\[\begin{align*}
+\mathcal{L}^\text{HMM}(\theta^{*(i)}\mid (X^*_{t,t^*})_{t^*})=\sum_{k=1}^{N^*}\alpha^{*(i)}_{k,T^*}.
+\end{align*}\]</span> The forward probabilities can be calculated in a recursively as <span class="math display">\[\begin{align*}
+\alpha^{*(i)}_{k,1} &amp;= \delta^{*(i)}_k f^{*(i,k)}(X^*_{t,1}), \\
+\alpha^{*(i)}_{k,t^*} &amp;= f^{*(i,k)}(X^*_{t,t^*})\sum_{j=1}^{N^*}\gamma^{*(i)}_{jk}\alpha^{*(i)}_{j,t^*-1}, \quad t^*=2,\dots,T^*.
+\end{align*}\]</span></p>
+<p>The transition from the likelihood function of an HMM to the likelihood function of an HHMM is straightforward: Consider the coarse-scale forward probabilities <span class="math display">\[\begin{align*}
+\alpha_{i,t}=f(X_1,\dots,X_t,(X^*_{1,t^*})_{t^*},\dots,(X^*_{t,t^*})_{t^*}, S_t=i),
+\end{align*}\]</span> where <span class="math inline">\(t=1,\dots,T\)</span> and <span class="math inline">\(i=1,\dots,N\)</span>. The likelihood function of the HHMM results as <span class="math display">\[\begin{align*}
+\mathcal{L}^\text{HHMM}(\theta,(\theta^{*(i)})_i\mid (X_t)_t,((X^*_{t,t^*})_{t^*})_t)=\sum_{i=1}^{N}\alpha_{i,T}.
+\end{align*}\]</span> The coarse-scale forward probabilities can be calculated similarly by applying the recursive scheme <span class="math display">\[\begin{align*}
+\alpha_{i,1} &amp;= \delta_i \mathcal{L}^\text{HMM}(\theta^{*(i)}\mid (X^*_{1,t^*})_{t^*})f^{(i)}(X_1), \\
+\alpha_{i,t} &amp;= \mathcal{L}^\text{HMM}(\theta^{*(i)}\mid (X^*_{t,t^*})_{t^*}) f^{(i)}(X_t)\sum_{j=1}^{N}\gamma_{ji}\alpha_{j,t-1}, \quad t=2,\dots,T.
+\end{align*}\]</span></p>
+</div>
+<div id="challenges-associated-with-the-likelihood-maximization" class="section level2">
+<h2>Challenges associated with the likelihood maximization</h2>
+<p>To account for parameter constraints associated with the transition probabilities (and potentially the parameters of the state-dependent distributions), we use parameter transformations. To ensure that the entries of the t.p.m.s fulfill non-negativity and the unity condition, we estimate unconstrained values <span class="math inline">\((\eta_{ij})_{i\neq j}\)</span> for the non-diagonal entries of <span class="math inline">\(\Gamma\)</span> and derive the probabilities using the multinomial logit link <span class="math display">\[\begin{align*}
+\gamma_{ij}=\frac{\exp[\eta_{ij}]}{1+\sum_{k\neq i}\exp[\eta_{ik}]},~i\neq j
+\end{align*}\]</span> rather than estimating the probabilities <span class="math inline">\((\gamma_{ij})_{i,j}\)</span> directly. The diagonal entries result from the unity condition as <span class="math display">\[\begin{align*}
+\gamma_{ii}=1-\sum_{j\neq i}\gamma_{ij}.
+\end{align*}\]</span> Furthermore, variances are strictly positive, which can be achieved by applying an exponential transformation to the unconstrained estimator.</p>
+<p>When numerically maximizing the likelihood using some Newton-Raphson-type method, we often face numerical under- or overflow, which can be addressed by maximizing the logarithm of the likelihood and incorporating constants in a conducive way (see <span class="citation"><a href="#ref-zuc16" role="doc-biblioref">Zucchini, MacDonald, and Langrock</a> (<a href="#ref-zuc16" role="doc-biblioref">2016</a>)</span> and <span class="citation"><a href="#ref-oel21" role="doc-biblioref">Oelschläger and Adam</a> (<a href="#ref-oel21" role="doc-biblioref">2021</a>)</span> for details).</p>
+<p>As the likelihood is maximized with respect to a relatively large number of parameters, the obtained maximum can be a local rather than the global one. To avoid this problem, it is recommended to run the maximization multiple times from different, possibly randomly selected starting points, and to choose the model that corresponds to the highest likelihood (see <span class="citation"><a href="#ref-zuc16" role="doc-biblioref">Zucchini, MacDonald, and Langrock</a> (<a href="#ref-zuc16" role="doc-biblioref">2016</a>)</span> and <span class="citation"><a href="#ref-oel21" role="doc-biblioref">Oelschläger and Adam</a> (<a href="#ref-oel21" role="doc-biblioref">2021</a>)</span> for details).</p>
+</div>
+<div id="application" class="section level2">
+<h2>Application</h2>
+<p>For illustration, we fit a 3-state HMM with state-dependent t-distributions to the DAX data that we prepared in the previous vignette on data management:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>controls <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">states =</span> <span class="dv">3</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sdds   =</span> <span class="st">&quot;t&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data   =</span> <span class="fu">list</span>(<span class="at">file        =</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;dax.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;fHMM&quot;</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">date_column =</span> <span class="st">&quot;Date&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">data_column =</span> <span class="st">&quot;Close&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">from        =</span> <span class="st">&quot;2000-01-01&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">to          =</span> <span class="st">&quot;2021-12-31&quot;</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">logreturns  =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit    =</span> <span class="fu">list</span>(<span class="st">&quot;runs&quot;</span> <span class="ot">=</span> <span class="dv">100</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>controls <span class="ot">&lt;-</span> <span class="fu">set_controls</span>(controls)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">prepare_data</span>(controls)</span></code></pre></div>
+<p>The <code>data</code> object can be directly passed to the <code>fit_model()</code> function that numerically maximizes the model’s (log-) likelihood function <code>runs = 100</code> times.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> This task can be parallelized by setting the <code>ncluster</code> argument.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dax_model_3t <span class="ot">&lt;-</span> <span class="fu">fit_model</span>(data, <span class="at">seed =</span> <span class="dv">1</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>The estimated model is saved in the {fHMM} package and can be accessed as follows:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(dax_model_3t)</span></code></pre></div>
+<p>Calling the <code>summary()</code> method provides an overview of the model fit, whereas <code>coef()</code> returns a data frame of the estimated model coefficients:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dax_model_3t)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Summary of fHMM model</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   simulated hierarchy       LL       AIC       BIC</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     FALSE     FALSE 16913.33 -33796.65 -33697.13</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; State-dependent distributions:</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; t() </span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Estimates:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                   lb   estimate        ub</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Gamma_2.1  2.790e-03  5.146e-03 9.429e-03</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Gamma_3.1         NA  1.500e-69        NA</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Gamma_1.2         NA  1.740e-02        NA</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Gamma_3.2         NA  2.641e-02        NA</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Gamma_1.3         NA  1.972e-64        NA</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Gamma_2.3  1.394e-02  2.170e-02 3.357e-02</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mu_1      -3.726e-03 -1.674e-03 3.784e-04</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mu_2      -7.969e-04 -2.518e-04 2.933e-04</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mu_3       9.610e-04  1.269e-03 1.576e-03</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sigma_1    2.330e-02  2.563e-02 2.819e-02</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sigma_2    1.269e-02  1.324e-02 1.381e-02</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sigma_3    5.332e-03  5.774e-03 6.253e-03</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; df_1       5.501e+00  1.064e+01 2.059e+01</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; df_2       4.958e+75  4.958e+75 4.958e+75</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; df_3       3.964e+00  5.272e+00 7.012e+00</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; States:</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; decoded</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    1    2    3 </span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  695 2753 2177 </span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -3.523766 -0.659750  0.010357 -0.002317  0.673963  3.919070</span></span></code></pre></div>
+<p>The estimated state-dependent distributions can be plotted as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dax_model_3t, <span class="at">plot_type =</span> <span class="st">&quot;sdds&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" width="80%" style="display: block; margin: auto;" /></p>
+<p>As mentioned above, the HMM likelihood function is prone to local optima. This effect can be visualized by plotting the log-likelihood value in the different optimization runs, where the best run is marked in red:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dax_model_3t, <span class="at">plot_type =</span> <span class="st">&quot;ll&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-oel21" class="csl-entry">
+Oelschläger, L., and T. Adam. 2021. <span>“Detecting Bearish and Bullish Markets in Financial Time Series Using Hierarchical Hidden Markov Models.”</span> <em>Statistical Modelling</em>.
+</div>
+<div id="ref-zuc16" class="csl-entry">
+Zucchini, W., I. L. MacDonald, and R. Langrock. 2016. <span>“Hidden Markov Models for Time Series: An Introduction Using <span>R</span>, 2nd Edition.”</span> <em>Chapman and Hall/CRC</em>.
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This vignette was build using R 4.1.2 with the {fHMM} 1.0.0 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>For convenience, the <code>controls</code> object is saved in <code>data</code>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>If you avoid any problems with clustering on your OS, use <code>ncluster = 1</code> which avoids any dependency on packages that provide clustering.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

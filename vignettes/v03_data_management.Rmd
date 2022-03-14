@@ -1,0 +1,92 @@
+---
+title: "Data management"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data management}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.dim = c(10,6),
+  out.width = "80%",
+  fig.align = 'center'
+)
+```
+
+This vignette^[This vignette was build using R `r paste(R.Version()[6:7], collapse = ".")` with the {fHMM} `r utils::packageVersion("fHMM")` package.] explains how to prepare or simulate data in {fHMM} for estimation.
+
+```{r load fHMM}
+library(fHMM)
+```
+
+## Empirical data
+
+Empirical data must be provided as a comma-separated values (CSV) file and its path must be specified in `set_controls()`, see [the vignette on specifying the controls](http://loelschlaeger.de/fHMM/articles/v02_controls.html) for details.^[The `download_data()` function explained below provides a convenient tool for downloading stock data from https://www.yahoo.com/finance in csv-format.] The {fHMM} package comes with two datasets of the Deutscher Aktienindex and the VW stock for demonstration purpose that can be accessed as follows:
+
+```{r, head dax}
+system.file("extdata", "dax.csv", package = "fHMM")
+system.file("extdata", "vw.csv", package = "fHMM")
+``` 
+
+The `prepare_data()` function prepares the data based on the `data` controls specifications and returns an `fHMM_data` object that can be passed to the `fit_model()` function for model fitting.
+
+```{r, prepare_data example}
+controls <- list(
+  states = 3,
+  sdds   = "t",
+  data   = list(file        = system.file("extdata", "dax.csv", package = "fHMM"),
+                date_column = "Date",
+                data_column = "Close",
+                logreturns  = TRUE)
+)
+controls <- set_controls(controls)
+data <- prepare_data(controls)
+summary(data)
+```
+
+## Download stock data
+
+Daily stock prices listed on https://finance.yahoo.com/ can be downloaded directly via
+
+```{r, eval = FALSE} 
+download_data(symbol, from, to, file)
+```
+
+where
+
+- `symbol` is the stock's symbol that has to match the official symbol on <https://finance.yahoo.com>,^[For example, `"^GDAXI"` is the symbol of the DAX and `"^GSPC"` the one of the S\&P 500.]
+
+- `from` and `to` define the time interval (in format `"YYYY-MM-DD"`),
+
+- `file` is the name of the file where the .csv-file is saved. Per default, it is saved in the current working directory under the name `<symbol>.csv`.
+
+For example, the call
+
+```{r}
+download_data(symbol = "^GDAXI", from = "2000-01-01", to = Sys.Date())
+```
+
+downloads the 21st century daily data of the DAX into the current working directory.
+
+## Highlighting events
+
+Historical events can be highlighted by specifying a named list `events` with elements `dates` (a vector of dates) and `labels` (a vector of labels for the events) and passing it to the plot method, for example:
+
+```{r, events}
+events <- fHMM:::fHMM_events(
+  list(
+    dates = c("2001-09-11","2008-09-15","2020-01-27"),
+    labels = c("9/11 terrorist attack","Bankruptcy of Lehman Brothers","First COVID-19 case in Germany")
+    )
+  )
+print(events)
+plot(data, events = events)
+```
+
+## Simulated data
+
+If the `data` parameter in the model's `controls` is unspecified, the model is fitted to simulated data from the model specification. This can be useful for testing the functionality or conducting simulation experiments. True model parameters can be specified by defining an `fHMM_parameters`-object via the `fHMM_parameters()` function and passing it to `prepare_data()`.

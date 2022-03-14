@@ -1,112 +1,139 @@
-# fHMM <img src='sticker/StickerShadesOfBlue.png' align="right" height="136" />
 
-[![CRAN status](https://www.r-pkg.org/badges/version-last-release/fHMM)](https://www.r-pkg.org/badges/version-last-release/fHMM)
-[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/fHMM)](https://cranlogs.r-pkg.org/badges/grand-total/fHMM)
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-👉 Fitting (hierarchical) hidden Markov models to financial data.
+# fHMM <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 
-💬 Found a bug? Request a feature? Please [tell us](https://github.com/loelschlaeger/fHMM/issues)!
+<!-- badges: start -->
 
-📝 In R, type `citation("fHMM")` for citing this package in publications.
+[![R-CMD-check](https://github.com/loelschlaeger/fHMM/workflows/R-CMD-check/badge.svg)](https://github.com/loelschlaeger/fHMM/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version-last-release/fHMM)](https://www.r-pkg.org/badges/version-last-release/fHMM)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/fHMM)](https://cranlogs.r-pkg.org/badges/grand-total/fHMM)
+[![codecov](https://app.codecov.io/gh/loelschlaeger/fHMM/branch/master/graph/badge.svg?token=OYU22T74DV)](https://app.codecov.io/gh/loelschlaeger/fHMM)
+<!-- badges: end -->
 
-## How to get started?
+With {fHMM} you can detect bearish and bullish markets in financial time
+series by applying *Hidden Markov Models (HMMs)*. The functionality and
+the model [is documented in detail
+here](https://loelschlaeger.de/fHMM/articles/). Below, you can find a
+first application to the German stock index
+[DAX](https://en.wikipedia.org/wiki/DAX).
 
-1. Run `install.packages("fHMM")` and `library("fHMM")` in your R console. to install **fHMM**.
-2. Specify your model by defining the named list `controls`. 
-3. Execute `fit_hmm(controls)`.
+## Installation
 
-We provide vignettes that give answers to the following FAQs:
-- How to specify a model in **fHMM**?
-- How to process financial data in **fHMM**?
-- How to interpret **fHMM** outputs?
-- How to debug **fHMM**?
-- How does **fHMM** process model parameters?
+You can install the released version of {fHMM} from
+[CRAN](https://CRAN.R-project.org) with:
 
-## Examples
-
-### Fitting a 2-state HMM to simulated data using gamma-distributions
-
-Click [here](https://github.com/loelschlaeger/fHMM/tree/master/models/HMM_2_sim_gamma) for the results.
-
-```R
-### set controls
-controls = list(
-  path    = ".",
-  id      = "HMM_2_sim_gamma",
-  model   = "hmm",
-  states  = 2,
-  sdds    = "gamma",
-  horizon = 5000,
-  fit     = list("seed" = 1)
-)
-
-### fit (H)HMM
-fit_hmm(controls)
+``` r
+install.packages("fHMM")
 ```
 
-### Fitting a 3-state HMM to the DAX closing prices from 2000 to 2020 using t-distributions
+## Contributing
 
-Click [here](https://github.com/loelschlaeger/fHMM/tree/master/models/HMM_3_DAX) for the results.
+We welcome contributions! Please submit [bug
+reports](https://github.com/loelschlaeger/fHMM/issues/new?assignees=&labels=bug&template=bug.md)
+and [feature
+requests](https://github.com/loelschlaeger/fHMM/issues/new?assignees=&labels=future&template=suggestion.md)
+as issues and extensions as pull request from a branch created from
+main.
 
-```R
-### download data (optional)
-download_data(name = "dax", symbol = "^GDAXI", path = ".")
+## Example: Fitting an HMM to the DAX
 
-### set controls
-controls = list(
-  path    = ".",
-  id      = "HMM_3_DAX",
-  model   = "hmm",
-  states  = 3,
-  sdds    = "t",
-  data    = list("source" = "dax", 
-                 "column" = "Close", 
-                 "truncate" = c("2000-01-03","2020-12-30")
-                 )
-)
-
-### define events (optional)
-events = list(
-  dates = c("2001-09-11","2008-09-15","2020-01-27"),
-  names = c("9/11 terrorist attack","Bankruptcy of Lehman Brothers","First COVID-19 case in Germany")
-)
-
-### fit (H)HMM
-fit_hmm(controls,events)
+``` r
+library(fHMM)
+#> Thanks for using {fHMM} version 1.0.0!
+#> See https://loelschlaeger.de/fHMM for help.
+#> Type 'citation("fHMM")' for citing this R package.
 ```
 
-### Fitting a (2,2)-state HHMM jointly to the DAX and the Deutsche Bank stock
+We fit a 2-state HMM with state-dependent t-distributions to the DAX
+log-returns from 2000 to 2020. The states can be interpreted as proxies
+for bearish and bullish markets.
 
-Click [here](https://github.com/loelschlaeger/fHMM/tree/master/models/HHMM_2_2_DAX_DBK_t_t) for the results.
+The package has a build-in function to download the data from [Yahoo
+Finance](https://finance.yahoo.com/):
 
-```R
-### download data (optional)
-download_data(name = "dax", symbol = "^GDAXI", path = ".")
-download_data(name = "dbk", symbol = "DBK.DE", path = ".")
-
-### set controls
-controls = list(
-  path    = ".",
-  id      = "HHMM_2_2_DAX_DBK_t_t",
-  model   = "hhmm",
-  states  = c(2,2),
-  sdds    = c("t","t"),
-  horizon = c(NA,"m"),
-  data    = list("source"       = c("dax","dbk"), 
-                 "column"       = c("Close","Close"), 
-                 "cs_transform" = function(x) (tail(x,1)-head(x,1))/head(x,1), 
-                 "log_returns"  = c(FALSE,TRUE),
-                 "truncate"     = c("2000-01-01",NA)),
-  fit     = list("runs" = 100)
-)
-
-### define events (optional)
-events = list(
-  dates = c("2001-09-11","2008-09-15","2020-01-27"),
-  names = c("9/11 terrorist attack","Bankruptcy of Lehman Brothers","First COVID-19 case in Germany")
-)
-
-### fit (H)HMM
-fit_hmm(controls,events)
-
+``` r
+path <- paste0(tempdir(),"/dax.csv")
+download_data(symbol = "^GDAXI", file = path, verbose = FALSE)
 ```
+
+We first need to define the model by setting some `controls`:
+
+``` r
+controls <- list(
+  states = 2,
+  sdds   = "t",
+  data   = list(file        = path,
+                date_column = "Date",
+                data_column = "Close",
+                logreturns  = TRUE,
+                from        = "2000-01-01",
+                to          = "2020-12-31")
+)
+controls <- set_controls(controls)
+```
+
+The function `prepare_data()` prepares the data for estimation:
+
+``` r
+data <- prepare_data(controls)
+summary(data)
+#> Summary of fHMM empirical data
+#> * number of observations: 5371 
+#> * data source: dax.csv 
+#> * date column: Date 
+#> * log returns: TRUE
+```
+
+We fit the model and subsequently decode the hidden states:
+
+``` r
+set.seed(1)
+model <- fit_model(data, ncluster = 7)
+#> Checking start values
+#> Maximizing likelihood
+#> Computing Hessian
+#> Fitting completed
+model <- decode_states(model)
+#> Decoded states
+summary(model)
+#> Summary of fHMM model
+#> 
+#>   simulated hierarchy       LL      AIC       BIC
+#> 1     FALSE     FALSE 15920.25 -31824.5 -31771.79
+#> 
+#> State-dependent distributions:
+#> t() 
+#> 
+#> Estimates:
+#>                   lb   estimate         ub
+#> Gamma_2.1  0.0113550  0.0179502  2.827e-02
+#> Gamma_1.2  0.0056213  0.0089654  1.427e-02
+#> mu_1       0.0005939  0.0009008  1.208e-03
+#> mu_2      -0.0020763 -0.0010611 -4.585e-05
+#> sigma_1    0.0073792  0.0078062  8.258e-03
+#> sigma_2    0.0170391  0.0184230  1.992e-02
+#> df_1       5.0194906  6.4223618  8.217e+00
+#> df_2       4.9532404  6.6609735  8.957e+00
+#> 
+#> States:
+#> decoded
+#>    1    2 
+#> 3645 1726
+```
+
+Having estimated the model, we can visualize the state-dependent
+distributions and the decoded time series to interpret bearish and
+bullish markets:
+
+``` r
+events <- fHMM_events(
+  list(dates = c("2001-09-11", "2008-09-15", "2020-01-27"),
+       labels = c("9/11 terrorist attack", "Bankruptcy Lehman Brothers", "First COVID-19 case Germany"))
+)
+plot(model, plot_type = c("sdds","ts"), events = events)
+```
+
+<img src="man/figures/README-plots-1.png" width="80%" style="display: block; margin: auto;" /><img src="man/figures/README-plots-2.png" width="80%" style="display: block; margin: auto;" />

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# fHMM <img src="man/figures/logo.svg" align="right" alt="" width="120" />
+# {fHMM}: Fitting HMMs to financial time series <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 
@@ -10,7 +10,7 @@
 status](https://www.r-pkg.org/badges/version-last-release/fHMM)](https://www.r-pkg.org/badges/version-last-release/fHMM)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/fHMM)](https://cranlogs.r-pkg.org/badges/grand-total/fHMM)
-[![codecov](https://app.codecov.io/gh/loelschlaeger/fHMM/branch/master/graph/badge.svg?token=OYU22T74DV)](https://app.codecov.io/gh/loelschlaeger/fHMM)
+[![codecov](https://codecov.io/gh/loelschlaeger/fHMM/branch/master/graph/badge.svg)](https://app.codecov.io/gh/loelschlaeger/fHMM)
 <!-- badges: end -->
 
 With {fHMM} you can detect bearish and bullish markets in financial time
@@ -29,6 +29,13 @@ You can install the released version of {fHMM} from
 install.packages("fHMM")
 ```
 
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("loelschlaeger/fHMM")
+```
+
 ## Contributing
 
 We welcome contributions! Please submit [bug
@@ -39,13 +46,6 @@ as issues and extensions as pull request from a branch created from
 main.
 
 ## Example: Fitting an HMM to the DAX
-
-``` r
-library(fHMM)
-#> Thanks for using {fHMM} version 1.0.0!
-#> See https://loelschlaeger.de/fHMM for help.
-#> Type 'citation("fHMM")' for citing this R package.
-```
 
 We fit a 2-state HMM with state-dependent t-distributions to the DAX
 log-returns from 2000 to 2020. The states can be interpreted as proxies
@@ -90,7 +90,6 @@ summary(data)
 We fit the model and subsequently decode the hidden states:
 
 ``` r
-set.seed(1)
 model <- fit_model(data, ncluster = 7)
 #> Checking start values
 #> Maximizing likelihood
@@ -136,4 +135,4 @@ events <- fHMM_events(
 plot(model, plot_type = c("sdds","ts"), events = events)
 ```
 
-<img src="man/figures/README-plots-1.png" width="80%" style="display: block; margin: auto;" /><img src="man/figures/README-plots-2.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-plots-1.png" width="75%" style="display: block; margin: auto;" /><img src="man/figures/README-plots-2.png" width="75%" style="display: block; margin: auto;" />

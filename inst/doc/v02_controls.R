@@ -12,7 +12,7 @@ library(fHMM)
 download_data(symbol = "^GDAXI", file = "dax.csv")
 
 ## ---- set controls emp hmm----------------------------------------------------
-controls = list(
+controls <- list(
   states = 3,
   sdds   = "t",
   data   = list(file        = "dax.csv",
@@ -24,15 +24,15 @@ controls = list(
 set_controls(controls)
 
 ## ---- set controls sim hmm----------------------------------------------------
-controls = list(
+controls <- list(
   states  = 2,
-  sdds    = "gamma(mu = -1|1)",
+  sdds    = "gamma(mu = 0.5|2)",
   horizon = 500
 )
 set_controls(controls)
 
 ## ---- set controls hhmm-------------------------------------------------------
-controls = list(
+controls <- list(
   hierarchy = TRUE,
   horizon   = c(100, 10),
   sdds      = c("t(df = 1)", "t(df = Inf)"),

@@ -1,23 +1,25 @@
-#' Check date format "YYYY-MM-DD"
+#' Check date format \code{"YYYY-MM-DD"}
 #'
 #' @description
-#' This function checks if the input \code{date} has the format "YYYY-MM-DD".
+#' This function checks if the input \code{date} has the format 
+#' \code{"YYYY-MM-DD"}.
 #'
 #' @param date
-#' A character, specifying a date in format "YYYY-MM-DD".
+#' A character, specifying a date in format \code{"YYYY-MM-DD"}.
 #'
 #' @return
-#' \code{as.Date(date)} if \code{date} has the format "YYYY-MM-DD".
+#' \code{as.Date(date)} if \code{date} has the format \code{"YYYY-MM-DD"}.
 #' Otherwise, the function throws an error.
 #'
 #' @keywords
-#' utils
+#' internal utils
 #'
 #' @examples
 #' fHMM:::check_date(date = "2000-01-01")
+
 check_date <- function(date) {
   date <- try(as.Date(date), silent = TRUE)
-  if (inherits(date,"try-error") || any(is.na(as.Date(date, format = "%Y-%m-%d")))) {
+  if (inherits(date,"try-error") || anyNA(as.Date(date, format = "%Y-%m-%d"))) {
     stop("Date not in required format 'YYYY-MM-DD'.")
   }
   return(date)
@@ -46,11 +48,12 @@ check_date <- function(date) {
 #' A boolean.
 #'
 #' @keywords
-#' utils
+#' internal utils
 #'
 #' @examples
 #' fHMM:::is_number(1, int = TRUE)
 #' fHMM:::is_number(pi, int = TRUE)
+
 is_number <- function(x, int = FALSE, neg = FALSE, non_neg = FALSE, pos = FALSE,
                       non_pos = FALSE) {
   if (length(x) == 0) {
@@ -108,11 +111,12 @@ is_number <- function(x, int = FALSE, neg = FALSE, non_neg = FALSE, pos = FALSE,
 #' A boolean.
 #'
 #' @keywords
-#' utils
+#' internal utils
 #'
 #' @examples
 #' fHMM:::is_tpm(diag(2))
 #' fHMM:::is_tpm(matrix(1, 2, 2))
+
 is_tpm <- function(x) {
   if (nrow(x) != ncol(x) ||
     any(abs(rowSums(x) - 1) > .Machine$double.eps) ||
@@ -138,7 +142,7 @@ is_tpm <- function(x) {
 #' in \code{x}.
 #'
 #' @keywords
-#' utils
+#' internal utils
 #'
 #' @importFrom stats dist
 #'
@@ -146,6 +150,7 @@ is_tpm <- function(x) {
 #' x <- c(-1, 0, 1)
 #' y <- c(0.1, 2, -1.2)
 #' fHMM:::match_all(x = x, y = y)
+
 match_all <- function(x, y) {
   stopifnot(length(x) == length(y))
   matches <- numeric(length(x))
@@ -157,8 +162,8 @@ match_all <- function(x, y) {
           if (!is.na(x[i_x]) && !is.na(y[i_y])) {
             if (isTRUE(all.equal(x[i_x], y[i_y], d))) {
               matches[i_y] <- i_x
-              x[i_x] <- NA
-              y[i_y] <- NA
+              x[i_x] <- NA_integer_
+              y[i_y] <- NA_integer_
             }
           }
         }
@@ -181,12 +186,13 @@ match_all <- function(x, y) {
 #' A transition probability matrix.
 #'
 #' @keywords
-#' utils
+#' internal utils
 #'
 #' @importFrom stats runif
 #'
 #' @examples
 #' fHMM:::sample_tpm(dim = 3)
+
 sample_tpm <- function(dim) {
   Gamma <- matrix(stats::runif(dim^2), dim, dim)
   Gamma <- Gamma / rowSums(Gamma)
@@ -215,12 +221,13 @@ sample_tpm <- function(dim) {
 #' A numeric vector of length \code{T} with states.
 #'
 #' @keywords
-#' utils
+#' internal utils
 #'
 #' @examples
 #' Gamma <- matrix(c(0.5, 0.3, 0.5, 0.7), 2, 2)
 #' T <- 10
 #' fHMM:::simulate_markov_chain(Gamma = Gamma, T = T)
+
 simulate_markov_chain <- function(Gamma, T, delta = Gamma2delta(Gamma),
                                   seed = NULL, total_length = T) {
 
@@ -252,7 +259,7 @@ simulate_markov_chain <- function(Gamma, T, delta = Gamma2delta(Gamma),
   }
 
   ### append NA's
-  markov_chain <- c(markov_chain, rep(NA, total_length - T))
+  markov_chain <- c(markov_chain, rep(NA_integer_, total_length - T))
 
   ### return Markov chain
   return(markov_chain)

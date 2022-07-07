@@ -17,8 +17,8 @@ simulate_observations(
 \arguments{
 \item{markov_chain}{A numeric vector of states of a Markov chain.}
 
-\item{sdd}{The name of the state-dependent distribution, one of \code{"t"} and
-\code{"gamma"}.}
+\item{sdd}{The name of the state-dependent distribution, one of \code{"t"},
+\code{"gamma"}, and \code{"lnorm"}.}
 
 \item{mus}{A vector of expected values.}
 
@@ -34,7 +34,7 @@ than \code{length(markov_chain)}.}
 \value{
 A numeric vector of length \code{total_length}, where the first
 \code{length(markov_chain)} elements are numeric values and the last
-\code{total_length - length(markov_chain)} elements are \code{NA}.
+\code{total_length - length(markov_chain)} elements are \code{NA_real_}.
 }
 \description{
 This function simulates state-dependent observations.

@@ -147,9 +147,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2>Empirical data</h2>
 <p>Empirical data must be provided as a comma-separated values (CSV) file and its path must be specified in <code>set_controls()</code>, see <a href="http://loelschlaeger.de/fHMM/articles/v02_controls.html">the vignette on specifying the controls</a> for details.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> The {fHMM} package comes with two datasets of the Deutscher Aktienindex and the VW stock for demonstration purpose that can be accessed as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;dax.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;fHMM&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;C:/Users/Lennart/AppData/Local/Temp/RtmpEbfszq/Rinst73032c32f32/fHMM/extdata/dax.csv&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;C:/Users/loelschlaeger/AppData/Local/Temp/RtmpiSMuNu/Rinst4d81c6a7447/fHMM/extdata/dax.csv&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;vw.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;fHMM&quot;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;C:/Users/Lennart/AppData/Local/Temp/RtmpEbfszq/Rinst73032c32f32/fHMM/extdata/vw.csv&quot;</span></span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;C:/Users/loelschlaeger/AppData/Local/Temp/RtmpiSMuNu/Rinst4d81c6a7447/fHMM/extdata/vw.csv&quot;</span></span></code></pre></div>
 <p>The <code>prepare_data()</code> function prepares the data based on the <code>data</code> controls specifications and returns an <code>fHMM_data</code> object that can be passed to the <code>fit_model()</code> function for model fitting.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>controls <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">states =</span> <span class="dv">3</span>,</span>
@@ -183,8 +183,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Download successful.</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * symbol: ^GDAXI </span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * from: 2000-01-03 </span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * to: 2022-05-02 </span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * path: C:\Users\Lennart\AppData\Local\Temp\RtmpEbfszq\Rbuild730281d61c4\fHMM\vignettes\^GDAXI.csv</span></span></code></pre></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * to: 2022-07-07 </span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * path: C:\Users\loelschlaeger\AppData\Local\Temp\RtmpiSMuNu\Rbuild4d85fe434fa\fHMM\vignettes\^GDAXI.csv</span></span></code></pre></div>
 <p>downloads the 21st century daily data of the DAX into the current working directory.</p>
 </div>
 <div id="highlighting-events" class="section level2">
@@ -211,7 +211,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>This vignette was build using R 4.1.3 with the {fHMM} 1.0.2 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>This vignette was build using R 4.1.0 with the {fHMM} 1.0.3 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>The <code>download_data()</code> function explained below provides a convenient tool for downloading stock data from <a href="https://finance.yahoo.com/" class="uri">https://finance.yahoo.com/</a> in csv-format.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 <li id="fn3"><p>For example, <code>&quot;^GDAXI&quot;</code> is the symbol of the DAX and <code>&quot;^GSPC&quot;</code> the one of the S&amp;P 500.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>

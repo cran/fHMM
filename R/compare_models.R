@@ -16,7 +16,7 @@
 #' A data frame with models in rows and comparison criteria in columns.
 #'
 #' @examples
-#' data(dax_model_3t)
+#' data("dax_model_3t")
 #' compare_models(dax_model_3t)
 #' @export
 
@@ -31,7 +31,8 @@ compare_models <- function(...) {
   ### check if models are of class "fHMM_model"
   for (i in seq_len(length(models))) {
     if (!inherits(models[[i]],"fHMM_model")) {
-      stop(paste0("Model '", model_names[i], "' is not of class 'fHMM_model'."))
+      stop(paste0("Model '", model_names[i], "' is not of class 'fHMM_model'.",
+                  call. = FALSE))
     }
   }
 
@@ -41,14 +42,15 @@ compare_models <- function(...) {
     for (j in 1:i) {
       data_j <- as.numeric(unlist(models[[j]]$data$data))
       if (!identical(data_i, data_j)) {
-        warning(paste0("Models '", model_names[i], "' and '", model_names[j], "' are not estimated on the same data, be cautious comparing them."))
+        warning(paste0("Models '", model_names[i], "' and '", model_names[j], 
+                       "' are not estimated on the same data, be cautious comparing them."))
       }
     }
   }
 
   ### create output matrix
   criteria <- c("parameters", "log-likelihood", "AIC", "BIC")
-  output <- matrix(NA, nrow = length(models), ncol = length(criteria))
+  output <- matrix(NA_real_, nrow = length(models), ncol = length(criteria))
   rownames(output) <- model_names
   colnames(output) <- criteria
   for (i in seq_len(length(models))) {
@@ -60,5 +62,5 @@ compare_models <- function(...) {
   }
 
   ### return output
-  return(round(output, 2))
+  return(output)
 }

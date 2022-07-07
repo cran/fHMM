@@ -6,7 +6,7 @@ knitr::opts_chunk$set(
   out.width = "80%",
   fig.align = 'center'
 )
-library(fHMM)
+library("fHMM")
 
 ## ----dax model----------------------------------------------------------------
 data(dax_model_3t)
@@ -18,6 +18,5 @@ dax_model_3t <- compute_residuals(dax_model_3t)
 plot(dax_model_3t, plot_type = "pr")
 
 ## -----------------------------------------------------------------------------
-res <- dax_model_3t$residuals
-tseries::jarque.bera.test(res)
+tseries::jarque.bera.test(residuals(dax_model_3t))
 

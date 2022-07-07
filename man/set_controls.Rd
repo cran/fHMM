@@ -19,9 +19,11 @@ A boolean, set to \code{TRUE} for an hierarchical HMM.
 \item \code{states} \code{(*)} (\code{2}):
 The number of states of the underlying Markov chain.
 \item \code{sdds} \code{(*)} (\code{"t(df = Inf)"}):
-Specifying the state-dependent distribution, one of the \code{"t"} (the
-t-distribution) or \code{"gamma"} (the gamma distribution).
-To fix one or more parameter values, write e.g.
+Specifying the state-dependent distribution, one of \code{"t"}, or
+\code{"gamma"} (the gamma distribution), or \code{"lnorm"} (the log-normal
+distribution).
+You can fix the parameters (mean \code{mu}, standard deviation \
+code{sigma}, degrees of freedom \code{df}) of these distributions, e.g.
 \code{"t(df = Inf)"} or \code{"gamma(mu = 0, sigma = 1)"}, respectively.
 To fix different values of one parameter for different states, separate by
 "|", e.g. \code{"t(mu = -1|1)"}.
@@ -29,7 +31,8 @@ To fix different values of one parameter for different states, separate by
 A numeric, specifying the length of the time horizon. The first entry
 of \code{horizon} is ignored if \code{data} is specified.
 \item \code{period} (\code{"m"}):
-Only relevant if \code{hierarchy = TRUE} and \code{horizon[2] = NA}.
+Only relevant if \code{hierarchy = TRUE} and
+\code{horizon[2] = NA_integer_}.
 In this case, it specifies a flexible, periodic fine-scale time horizon
 and can be one of
 \itemize{
@@ -47,17 +50,18 @@ have a column named \code{date_column} (with dates) and
 \code{data_column} (with financial data).
 \item \code{date_column} \code{(*)} (\code{"Date"}):
 A character, the name of the column in \code{file} with dates. Can be
-\code{NA} in which case consecutive integers are used as time points.
+\code{NA_character_} in which case consecutive integers are used as time
+points.
 \item \code{data_column} \code{(*)} (\code{"Close"}):
 A character, the name of the column in \code{file} with financial data.
-\item \code{from} (\code{NA}):
+\item \code{from} (\code{NA_character_}):
 A character of the format \code{"YYYY-MM-DD"}, setting a lower data
-limit. No lower limit if \code{from = NA}. Ignored if
+limit. No lower limit if \code{from = NA_character_}. Ignored if
 \code{controls$data$date_column} is \code{NA}.
-\item \code{to} (\code{NA}):
+\item \code{to} (\code{NA_character_}):
 A character of the format \code{"YYYY-MM-DD"}, setting an upper data
-limit. No upper limit if \code{from = NA}. Ignored if
-\code{controls$data$date_column} is \code{NA}.
+limit. No upper limit if \code{from = NA_character_}. Ignored if
+\code{controls$data$date_column} is \code{NA_character_}.
 \item \code{logreturns} \code{(*)} (\code{FALSE}):
 A boolean, if \code{TRUE} the data is transformed to log-returns.
 \item \code{merge} (\code{function(x) mean(x)}):

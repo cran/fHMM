@@ -24,6 +24,10 @@
 #' @examples
 #' controls <- set_controls()
 #' fHMM:::fHMM_colors(controls, colors = c("red", "blue"))
+#' 
+#' @keywords 
+#' internal
+#' 
 #' @importFrom grDevices col2rgb colorRampPalette adjustcolor
 
 fHMM_colors <- function(controls, colors = NULL) {
@@ -54,7 +58,7 @@ fHMM_colors <- function(controls, colors = NULL) {
   if (!controls[["hierarchy"]]) {
     out <- col_alpha(base_col(controls[["states"]][1]))
   } else {
-    out <- matrix(NA,
+    out <- matrix(NA_character_,
       nrow = controls[["states"]][1],
       ncol = controls[["states"]][2] + 1
     )

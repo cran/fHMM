@@ -18,8 +18,9 @@
 #' @export
 #'
 #' @examples
-#' data(dax_model_3t)
+#' data("dax_model_3t")
 #' decode_states(dax_model_3t)
+#' 
 #' @importFrom stats dt dgamma
 
 decode_states <- function(x, verbose = TRUE) {
@@ -28,7 +29,7 @@ decode_states <- function(x, verbose = TRUE) {
   if (!inherits(x,"fHMM_model")) {
     stop("'x' must be of class 'fHMM_model'.")
   }
-  if (!is.logical(verbose) || length(verbose) != 1) {
+  if (!isTRUE(verbose) && !isFALSE(verbose)) {
     stop("'verbose' must be either TRUE or FALSE.")
   }
 
@@ -49,6 +50,10 @@ decode_states <- function(x, verbose = TRUE) {
           shape = mus[n]^2 / sigmas[n]^2,
           scale = sigmas[n]^2 / mus[n]
         )
+      }
+      if (sdd == "lnorm") {
+        allprobs[n, ] <- stats::dlnorm(observations, meanlog = mus[n], 
+                                       sdlog = sigmas[n])                            
       }
     }
     xi <- matrix(0, nstates, T)
@@ -78,7 +83,8 @@ decode_states <- function(x, verbose = TRUE) {
       dfs = par$dfs, sdd = par$sdd[[1]]$name
     )
   } else {
-    decoding <- matrix(NA, ncol = ncol(x$data$data), nrow = nrow(x$data$data))
+    decoding <- matrix(NA_real_, ncol = ncol(x$data$data), 
+                       nrow = nrow(x$data$data))
     decoding[, 1] <- viterbi(
       observations = x$data$data[, 1],
       nstates = x$data$controls$states[1],
@@ -99,7 +105,7 @@ decode_states <- function(x, verbose = TRUE) {
           dfs = par$dfs_star[[curr]],
           sdd = par$sdd[[2]]$name
         ),
-        rep(NA, max(x$data$T_star) - x$data$T_star[t])
+        rep(NA_real_, max(x$data$T_star) - x$data$T_star[t])
       )
     }
   }

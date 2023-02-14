@@ -1,24 +1,25 @@
 #' Read data
 #'
 #' @description
-#' This function reads financial data for the {fHMM} package.
+#' This helper function reads financial data for the \{fHMM\} package.
 #'
 #' @inheritParams prepare_data
+#' 
 #' @return
-#' A list containing the following elements:
+#' A \code{list} containing the following elements:
 #' \itemize{
-#'  \item the matrix of the \code{dates} if \code{controls$simulated = FALSE}
+#'  \item the \code{matrix} of the \code{dates} if \code{controls$simulated = FALSE}
 #'        and \code{controls$data$data_column} is specified,
-#'  \item the matrix of the \code{time_points} if \code{controls$simulated = TRUE}
+#'  \item the \code{matrix} of the \code{time_points} if \code{controls$simulated = TRUE}
 #'        or \code{controls$data$data_column} is not specified,
-#'  \item the matrix of the empirical \code{data} used for estimation,
-#'  \item the matrix \code{time_series} of empirical data before the transformation
-#'        to log-returns,
-#'  \item the vector of fine-scale chunk sizes \code{T_star} if
+#'  \item the \code{matrix} of the empirical \code{data} used for estimation,
+#'  \item the \code{matrix} named \code{time_series} of empirical data before 
+#'        the transformation to log-returns,
+#'  \item the \code{vector} of fine-scale chunk sizes \code{T_star} if
 #'        \code{controls$hierarchy = TRUE}.
 #' }
-#' @keywords
-#' internal
+#' 
+#' @keywords internal
 #'
 #' @importFrom utils read.csv head
 
@@ -34,13 +35,18 @@ read_data <- function(controls) {
 
   ### read data
   data_raw <- list()
-  for (i in 1:ifelse(controls[["hierarchy"]], 2, 1)) {
-    data_raw[[i]] <- utils::read.csv(
-      file = controls[["data"]][["file"]][i],
-      header = TRUE, sep = ",", na.strings = "null"
-    )
+  if (controls[["data"]][["data_inside"]]) {
+    for (i in 1:ifelse(controls[["hierarchy"]], 2, 1)) {
+      data_raw[[i]] <- controls[["data"]][["file"]][[i]]
+    }
+  } else {
+    for (i in 1:ifelse(controls[["hierarchy"]], 2, 1)) {
+      data_raw[[i]] <- utils::read.csv(
+        file = controls[["data"]][["file"]][i],
+        header = TRUE, sep = ",", na.strings = "null"
+      )
+    }
   }
-
 
   ### check columns in data
   date_column <- controls[["data"]][["date_column"]]
@@ -102,24 +108,25 @@ read_data <- function(controls) {
       data_raw[[1]] <- data_raw[[1]][data_raw[[1]][[date_column[1]]] %in% intersect(data_raw[[1]][[date_column[1]]], data_raw[[2]][[date_column[2]]]), ]
       data_raw[[2]] <- data_raw[[2]][data_raw[[2]][[date_column[2]]] %in% intersect(data_raw[[2]][[date_column[2]]], data_raw[[1]][[date_column[1]]]), ]
     }
+    
+    ### function to find exact or nearest position of 'date' in 'data'
+    find_date <- function(date, data) {
+      incr <- 0
+      while (TRUE) {
+        candidate <- which(data[[date_column[i]]] == as.Date(date) + incr)
+        if (length(candidate) == 1) {
+          return(candidate)
+        }
+        candidate <- which(data[[date_column[i]]] == as.Date(date) - incr)
+        if (length(candidate) == 1) {
+          return(candidate)
+        }
+        incr <- incr + 1
+      }
+    }
 
     ### truncate data based on 'controls$data$from' and 'controls$data$to'
     for (i in 1:ifelse(controls[["hierarchy"]], 2, 1)) {
-      ### find exact or nearest position of 'date' in 'data'
-      find_date <- function(date, data) {
-        incr <- 0
-        while (TRUE) {
-          candidate <- which(data[[date_column[i]]] == as.Date(date) + incr)
-          if (length(candidate) == 1) {
-            return(candidate)
-          }
-          candidate <- which(data[[date_column[i]]] == as.Date(date) - incr)
-          if (length(candidate) == 1) {
-            return(candidate)
-          }
-          incr <- incr + 1
-        }
-      }
       t_max <- controls[["data"]][["to"]]
       if (!is.na(t_max)) {
         data_raw[[i]] <- data_raw[[i]][seq_len(find_date(t_max, data_raw[[i]])), ]

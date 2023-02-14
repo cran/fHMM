@@ -4,13 +4,14 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.dim = c(10,6),
   out.width = "80%",
-  fig.align = 'center'
+  fig.align = 'center',
+  tidy = TRUE
 )
 
-## ----load fHMM----------------------------------------------------------------
-library(fHMM)
+## ----load fHMM, message = FALSE-----------------------------------------------
+library("fHMM")
 
-## ---- head dax----------------------------------------------------------------
+## ---- head dax, results = FALSE-----------------------------------------------
 system.file("extdata", "dax.csv", package = "fHMM")
 system.file("extdata", "vw.csv", package = "fHMM")
 
@@ -31,7 +32,8 @@ summary(data)
 #  download_data(symbol, from, to, file)
 
 ## -----------------------------------------------------------------------------
-download_data(symbol = "^GDAXI", from = "2000-01-01", to = Sys.Date())
+dax <- download_data(symbol = "^GDAXI", from = "2000-01-01", to = Sys.Date())
+head(dax)
 
 ## ---- events------------------------------------------------------------------
 events <- fHMM:::fHMM_events(

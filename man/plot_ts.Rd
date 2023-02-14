@@ -4,17 +4,35 @@
 \alias{plot_ts}
 \title{Visualize time series}
 \usage{
-plot_ts(data, decoding, colors, events)
+plot_ts(
+  data,
+  decoding,
+  colors,
+  events = NULL,
+  title = NULL,
+  from = NULL,
+  to = NULL
+)
 }
 \arguments{
 \item{data}{An object of class \code{fHMM_data}.}
 
 \item{decoding}{Either \code{NULL} or an object of class \code{fHMM_decoding}.}
 
-\item{colors}{Either \code{NULL} or an object of class \code{fHMM_colors}.
-Ignored if \code{decoding = NULL}.}
+\item{colors}{Either \code{NULL} (default) or a \code{character} vector of color names or
+hexadecimal RGB triplets.}
 
-\item{events}{Either \code{NULL} or an object of class \code{fHMM_events}.}
+\item{events}{An object of class \code{\link{fHMM_events}}.}
+
+\item{title}{Optionally a \code{character} for a custom title.}
+
+\item{from}{Optionally a \code{character}, a date in format \code{"YYYY-MM-DD"},
+setting the lower date bound for plotting.
+By default, \code{from = NULL}, i.e. no lower bound.}
+
+\item{to}{Optionally a \code{character}, a date in format \code{"YYYY-MM-DD"},
+setting the upper date bound for plotting.
+By default, \code{to = NULL}, i.e. no upper bound.}
 }
 \value{
 No return value. Draws a plot to the current device.

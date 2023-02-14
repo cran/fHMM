@@ -4,9 +4,10 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.dim = c(10,6),
   out.width = "80%",
-  fig.align = 'center'
+  fig.align = 'center',
+  tidy = TRUE
 )
-library(fHMM)
+library("fHMM")
 
 ## ----data preparation---------------------------------------------------------
 controls <- list(

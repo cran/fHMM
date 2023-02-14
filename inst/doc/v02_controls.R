@@ -1,12 +1,13 @@
 ## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  tidy = TRUE
 )
-library(printr)
+library("printr")
 
-## ----load fHMM----------------------------------------------------------------
-library(fHMM)
+## ----load fHMM, message = FALSE-----------------------------------------------
+library("fHMM")
 
 ## -----------------------------------------------------------------------------
 download_data(symbol = "^GDAXI", file = "dax.csv")

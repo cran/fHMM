@@ -9,21 +9,23 @@ simulate_data(controls, true_parameters, seed = NULL)
 \arguments{
 \item{controls}{An object of class \code{fHMM_controls}.}
 
-\item{true_parameters}{An object of class \code{fHMM_parameters}, used as simulation parameters.}
+\item{true_parameters}{An object of class \code{fHMM_parameters}, used as simulation parameters.
+By default, \code{true_parameters = NULL}, i.e., sampled true parameters.}
 
-\item{seed}{Set a seed for the data simulation.}
+\item{seed}{Set a seed for the data simulation.
+No seed per default.}
 }
 \value{
-A list containing the following elements:
+A \code{list} containing the following elements:
 \itemize{
-\item the matrix of \code{time_points},
-\item the matrix of the simulated \code{markov_chain},
-\item the matrix of the simulated \code{data},
-\item the vector of fine-scale chunk sizes \code{T_star} if
+\item the \code{matrix} of \code{time_points},
+\item the \code{matrix} of the simulated \code{markov_chain},
+\item the \code{matrix} of the simulated \code{data},
+\item the \code{numeric} vector of fine-scale chunk sizes \code{T_star} if
 \code{controls$hierarchy = TRUE}.
 }
 }
 \description{
-This function simulates data for the {fHMM} package.
+This helper function simulates data for the \{fHMM\} package.
 }
 \keyword{internal}

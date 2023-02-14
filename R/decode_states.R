@@ -1,25 +1,26 @@
-#' Decoding the underlying hidden state sequence
+#' Decode the underlying hidden state sequence
 #'
 #' @description
 #' This function decodes the (most likely) underlying hidden state sequence by
-#' applying the Viterbi algorithm.
+#' applying the Viterbi algorithm for global decoding.
 #'
 #' @references
 #' <https://en.wikipedia.org/wiki/Viterbi_algorithm>
 #'
 #' @param x
-#' An object of class \code{fHMM_model}.
+#' An object of class \code{\link{fHMM_model}}.
 #' @param verbose
 #' Set to \code{TRUE} to print progress messages.
 #'
 #' @return
-#' An object of class \code{fHMM_model} with decoded state sequence included.
+#' An object of class \code{\link{fHMM_model}} with decoded state sequence 
+#' included.
 #'
 #' @export
 #'
 #' @examples
-#' data("dax_model_3t")
 #' decode_states(dax_model_3t)
+#' plot(dax_model_3t, type = "ts")
 #' 
 #' @importFrom stats dt dgamma
 
@@ -27,10 +28,10 @@ decode_states <- function(x, verbose = TRUE) {
 
   ### check input
   if (!inherits(x,"fHMM_model")) {
-    stop("'x' must be of class 'fHMM_model'.")
+    stop("'x' must be of class 'fHMM_model'.", call. = FALSE)
   }
   if (!isTRUE(verbose) && !isFALSE(verbose)) {
-    stop("'verbose' must be either TRUE or FALSE.")
+    stop("'verbose' must be either TRUE or FALSE.", call. = FALSE)
   }
 
   ### definition of the Viterbi algorithm for state decoding

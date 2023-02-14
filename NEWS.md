@@ -1,3 +1,12 @@
+# fHMM 1.1.0
+
+* Extended the time horizon of saved data and updated models for demonstration.
+* The `download_data()` function now returns the data as a `data.frame` by default. However, specifying argument `file` still allows for saving the data as a .csv file.
+* The `plot.fHMM_model()` function now has the additional argument `ll_relative` (default is `TRUE`) to plot the relative log-likelihood values when `plot_type = "ll"`.
+* Significantly increased the test coverage and fixed minor bugs.
+* Changed color of time series plot from `"lightgray"` to `"black"` for better readability.
+* Added a title to the time series plot when calling `plot.fHMM_model(plot_type = "ts")`. Additionally, a time interval with arguments `from` and `to` can be selected to zoom into the data.
+
 # fHMM 1.0.3
 
 * We added the following methods for an `fHMM_model` object: `AIC()`, `BIC()`, `logLik()`, `nobs()`, `npar()`, `residuals()`.

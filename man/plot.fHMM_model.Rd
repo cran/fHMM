@@ -2,12 +2,22 @@
 % Please edit documentation in R/plot.R
 \name{plot.fHMM_model}
 \alias{plot.fHMM_model}
-\title{Plot method for an object of class \code{fHMM_model}}
+\title{Plot method for an object of class \code{\link{fHMM_model}}}
 \usage{
-\method{plot}{fHMM_model}(x, plot_type = "ts", events = NULL, colors = NULL, ...)
+\method{plot}{fHMM_model}(
+  x,
+  plot_type = "ts",
+  events = NULL,
+  colors = NULL,
+  ll_relative = TRUE,
+  title = NULL,
+  from = NULL,
+  to = NULL,
+  ...
+)
 }
 \arguments{
-\item{x}{An object of class \code{fHMM_model}.}
+\item{x}{An object of class \code{\link{fHMM_model}}.}
 
 \item{plot_type}{A character (vector), specifying the type of plot and can be one (or more) of
 \itemize{
@@ -19,16 +29,31 @@ distributions,
 \item \code{"ts"} for a visualization of the financial time series.
 }}
 
-\item{events}{An object of class \code{fHMM_events}.}
+\item{events}{An object of class \code{\link{fHMM_events}}.}
 
-\item{colors}{Either \code{NULL} or a character vector of color names or hexadecimal RGB
-triplets.}
+\item{colors}{Either \code{NULL} (default) or a \code{character} vector of color names or
+hexadecimal RGB triplets.}
 
-\item{...}{Ignored.}
+\item{ll_relative}{A \code{logical}, set to \code{TRUE} (default) to plot the differences from
+the best log-likelihood value. Set to \code{FALSE} to plot the absolute
+values.}
+
+\item{title}{Optionally a \code{character} for a custom title.}
+
+\item{from}{Optionally a \code{character}, a date in format \code{"YYYY-MM-DD"},
+setting the lower date bound for plotting.
+By default, \code{from = NULL}, i.e. no lower bound.}
+
+\item{to}{Optionally a \code{character}, a date in format \code{"YYYY-MM-DD"},
+setting the upper date bound for plotting.
+By default, \code{to = NULL}, i.e. no upper bound.}
+
+\item{...}{Currently not used.}
 }
 \value{
 No return value. Draws a plot to the current device.
 }
 \description{
-This function is the plot method for an object of class \code{fHMM_model}.
+This function is the plot method for an object of class
+\code{\link{fHMM_model}}.
 }

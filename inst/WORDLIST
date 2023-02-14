@@ -1,6 +1,7 @@
 Aktienindex
 Bera
 CMD
+Codecov
 DAX
 Deutscher
 HHMM
@@ -20,10 +21,10 @@ YYYY
 aperiodic
 aperiodicity
 argmax
-codecov
 csv
 dax
 discusss
+doi
 frac
 https
 ij
@@ -33,14 +34,15 @@ ji
 jk
 ldots
 mathcal
+metacran
 misspecification
 neq
 operatorname
 parallelization
 pre
-sdd
 th
 tpm
 tpm's
 treaten
 un
+vectorized

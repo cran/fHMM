@@ -1,10 +1,9 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  tidy = TRUE
+  fig.path = "fHMM-"
 )
-library("printr")
 
 ## ----load fHMM, message = FALSE-----------------------------------------------
 library("fHMM")
@@ -12,7 +11,7 @@ library("fHMM")
 ## -----------------------------------------------------------------------------
 download_data(symbol = "^GDAXI", file = "dax.csv")
 
-## ---- set controls emp hmm----------------------------------------------------
+## ----set controls emp hmm-----------------------------------------------------
 controls <- list(
   states = 3,
   sdds   = "t",
@@ -24,7 +23,7 @@ controls <- list(
 )
 set_controls(controls)
 
-## ---- set controls sim hmm----------------------------------------------------
+## ----set controls sim hmm-----------------------------------------------------
 controls <- list(
   states  = 2,
   sdds    = "gamma(mu = 0.5|2)",
@@ -32,7 +31,7 @@ controls <- list(
 )
 set_controls(controls)
 
-## ---- set controls hhmm-------------------------------------------------------
+## ----set controls hhmm--------------------------------------------------------
 controls <- list(
   hierarchy = TRUE,
   horizon   = c(100, 10),
@@ -40,7 +39,4 @@ controls <- list(
   period    = "m"
 )
 set_controls(controls)
-
-## ---- set_controls help page, printr.help.sections=c('arguments')-------------
-?set_controls
 

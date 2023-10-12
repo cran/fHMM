@@ -398,7 +398,7 @@ many states are difficult to interpret and are therefore often not
 desired, information criteria should be treaten with some caution and
 only considered as a rough guidance. For an in-depth discussion of
 pitfalls, practical challenges, and pragmatic solutions regarding model
-selection, see <span class="citation">Pohle et al. (<a href="#ref-poh17" role="doc-biblioref">2017</a>)</span>.</p>
+selection, see <span class="citation">Pohle et al. (<a href="#ref-poh17">2017</a>)</span>.</p>
 </div>
 <div id="the-compare_models-function" class="section level2">
 <h2>The <code>compare_models()</code> function</h2>
@@ -410,36 +410,12 @@ above model selection criteria. Below, we compare a 2-state HMM with
 normal state-dependent distributions with a 3-state HMM with
 state-dependent t-distributions for the DAX data, where the more complex
 model is clearly preferred:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(dax_model_2n)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(dax_model_3t)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">compare_models</span>(dax_model_2n, dax_model_3t)</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">parameters</th>
-<th align="right">loglikelihood</th>
-<th align="right">AIC</th>
-<th align="right">BIC</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">dax_model_2n</td>
-<td align="right">6</td>
-<td align="right">17403.61</td>
-<td align="right">-34795.21</td>
-<td align="right">-34755.13</td>
-</tr>
-<tr class="even">
-<td align="left">dax_model_3t</td>
-<td align="right">15</td>
-<td align="right">17649.52</td>
-<td align="right">-35269.03</td>
-<td align="right">-35168.84</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">data</span>(dax_model_2n)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(dax_model_3t)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">compare_models</span>(dax_model_2n, dax_model_3t)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt;              parameters loglikelihood       AIC       BIC</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; dax_model_2n          6      17403.61 -34795.21 -34755.13</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; dax_model_3t         15      17649.52 -35269.03 -35168.84</span></span></code></pre></div>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="unnumbered">References</h2>
@@ -456,8 +432,8 @@ Agricultural, Biological and Environmental Statistics</em> 22 (3):
 <div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
-<li id="fn1"><p>This vignette was build using R .4 with the
-<code>{fHMM}</code> 1.1.0 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>This vignette was build using R 4.2.2 with the
+<code>{fHMM}</code> 1.1.1 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

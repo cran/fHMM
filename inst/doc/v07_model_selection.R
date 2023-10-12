@@ -1,11 +1,11 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.dim = c(10,6),
+  fig.dim = c(10, 6),
   out.width = "80%",
-  fig.align = 'center',
-  tidy = TRUE
+  fig.align = "center",
+  fig.path = "fHMM-"
 )
 library("fHMM")
 

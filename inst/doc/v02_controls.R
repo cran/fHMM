@@ -9,13 +9,14 @@ knitr::opts_chunk$set(
 library("fHMM")
 
 ## -----------------------------------------------------------------------------
-download_data(symbol = "^GDAXI", file = "dax.csv")
+dax <- download_data(symbol = "^GDAXI")
+head(dax)
 
 ## ----set controls emp hmm-----------------------------------------------------
 controls <- list(
   states = 3,
   sdds   = "t",
-  data   = list(file        = "dax.csv",
+  data   = list(file        = dax,
                 date_column = "Date",
                 data_column = "Close",
                 logreturns  = TRUE),

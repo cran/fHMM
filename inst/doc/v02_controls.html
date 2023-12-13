@@ -382,12 +382,15 @@ other <code>{fHMM}</code> functionalities.</p>
 <h2>Example specifications</h2>
 <p>For demonstration, we list example specifications using data from the
 Deutscher Aktienindex DAX<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> <span class="citation">(<a href="#ref-jan92">Janßen and Rudolph 1992</a>)</span>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">download_data</span>(<span class="at">symbol =</span> <span class="st">&quot;^GDAXI&quot;</span>, <span class="at">file =</span> <span class="st">&quot;dax.csv&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; Download successful.</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; * symbol: ^GDAXI</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; * from: 1987-12-30</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; * to: 2023-10-12</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; * path: C:\Users\loelschlaeger\AppData\Local\Temp\Rtmp0UK1WS\Rbuild370061d934e\fHMM\vignettes\dax.csv</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>dax <span class="ot">&lt;-</span> <span class="fu">download_data</span>(<span class="at">symbol =</span> <span class="st">&quot;^GDAXI&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">head</span>(dax)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;         Date    Open    High     Low   Close Adj.Close Volume</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; 1 1987-12-30 1005.19 1005.19 1005.19 1005.19   1005.19      0</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 2 1987-12-31      NA      NA      NA      NA        NA     NA</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 3 1988-01-01      NA      NA      NA      NA        NA     NA</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 4 1988-01-04  956.49  956.49  956.49  956.49    956.49      0</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 5 1988-01-05  996.10  996.10  996.10  996.10    996.10      0</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 6 1988-01-06 1006.01 1006.01 1006.01 1006.01   1006.01      0</span></span></code></pre></div>
 <div id="hmms-for-empirical-data" class="section level3">
 <h3>HMMs for empirical data</h3>
 <p>The following lines of code specify a 3-state HMM with
@@ -399,7 +402,7 @@ number of numerical optimization runs to 50.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>controls <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">states =</span> <span class="dv">3</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">sdds   =</span> <span class="st">&quot;t&quot;</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">data   =</span> <span class="fu">list</span>(<span class="at">file        =</span> <span class="st">&quot;dax.csv&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">data   =</span> <span class="fu">list</span>(<span class="at">file        =</span> dax,</span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                <span class="at">date_column =</span> <span class="st">&quot;Date&quot;</span>,</span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                <span class="at">data_column =</span> <span class="st">&quot;Close&quot;</span>,</span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>                <span class="at">logreturns  =</span> <span class="cn">TRUE</span>),</span>
@@ -468,9 +471,10 @@ DAX.”</span> <em>Knapp Verlag</em>.
 <hr />
 <ol>
 <li id="fn1"><p>This vignette was build using R 4.2.2 with the
-<code>{fHMM}</code> 1.1.1 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<code>{fHMM}</code> 1.2.0 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>The <code>download_data()</code> function is explained
-in the vignette on data management.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+in <a href="https://loelschlaeger.de/fHMM/articles/v03_data_management.html">the
+vignette on data management</a>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

@@ -23,13 +23,13 @@ set_controls(
   logreturns = if (!hierarchy) FALSE else c(FALSE, FALSE),
   merge = function(x) mean(x),
   fit = list(),
-  runs = 100,
+  runs = 10,
   origin = FALSE,
   accept = 1:3,
-  gradtol = 1e-06,
-  iterlim = 200,
+  gradtol = 0.01,
+  iterlim = 100,
   print.level = 0,
-  steptol = 1e-06
+  steptol = 0.01
 )
 
 validate_controls(controls)
@@ -54,9 +54,10 @@ in more detail below:
 }
 Either none, all, or selected elements can be specified.
 
-Unspecified parameters are set to their default values, see below.
+Unspecified parameters are set to their default values.
 
-Specifications in \code{controls} override individual specifications.}
+Important: Specifications in \code{controls} always override individual
+specifications.}
 
 \item{hierarchy}{A \code{logical}, set to \code{TRUE} for an hierarchical HMM.
 
@@ -231,9 +232,10 @@ Specifications in \code{fit} override individual specifications.}
 optimization runs of the model likelihood from which the best one is selected
 as the final model.
 
-By default, \code{runs = 100}.}
+By default, \code{runs = 10}.}
 
-\item{origin}{Only relevant for simulated data, i.e., if \code{data} is \code{NA}.
+\item{origin}{Only relevant for simulated data, i.e., if the \code{data} control is
+\code{NA}.
 
 In this case, a \code{logical}. If \code{origin = TRUE} the optimization is
 initialized at the true parameter values.
@@ -249,12 +251,12 @@ By default, \code{accept = 1:3}.}
 \item{gradtol}{A positive \code{numeric} value, specifying the gradient tolerance, passed on
 to \code{\link[stats]{nlm}}.
 
-By default, \code{gradtol = 1e-6}.}
+By default, \code{gradtol = 0.01}.}
 
 \item{iterlim}{A positive \code{integer} value, specifying the iteration limit, passed on
 to \code{\link[stats]{nlm}}.
 
-By default, \code{iterlim = 200}.}
+By default, \code{iterlim = 100}.}
 
 \item{print.level}{One of \code{0}, \code{1}, and \code{2} to control the verbosity of the
 numerical likelihood optimization, passed on to \code{\link[stats]{nlm}}.
@@ -264,7 +266,7 @@ By default, \code{print.level = 0}.}
 \item{steptol}{A positive \code{numeric} value, specifying the step tolerance, passed on
 to \code{\link[stats]{nlm}}.
 
-By default, \code{gradtol = 1e-6}.}
+By default, \code{gradtol = 0.01}.}
 
 \item{x, object}{An object of class \code{fHMM_controls}.}
 

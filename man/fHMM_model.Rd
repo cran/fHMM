@@ -23,7 +23,7 @@ fHMM_model(
   ll,
   lls,
   gradient,
-  hessian,
+  inverse_fisher,
   decoding
 )
 
@@ -64,7 +64,7 @@ npar(object, ...)
 
 \item{gradient}{A \code{numeric} vector, the gradient at the optimum.}
 
-\item{hessian}{A \code{matrix}, the Hessian at the optimum.}
+\item{inverse_fisher}{A \code{numeric} vector, the inverse Fisher information for each parameter.}
 
 \item{decoding}{A \code{numeric} vector, the decoded time series.}
 

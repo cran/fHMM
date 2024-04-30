@@ -23,9 +23,10 @@
 #' }
 #' Either none, all, or selected elements can be specified.
 #' 
-#' Unspecified parameters are set to their default values, see below.
+#' Unspecified parameters are set to their default values.
 #' 
-#' Specifications in \code{controls} override individual specifications.
+#' Important: Specifications in \code{controls} always override individual 
+#' specifications.
 #' 
 #' @param hierarchy
 #' A \code{logical}, set to \code{TRUE} for an hierarchical HMM.
@@ -215,10 +216,11 @@
 #' optimization runs of the model likelihood from which the best one is selected
 #' as the final model.
 #'
-#' By default, \code{runs = 100}.
+#' By default, \code{runs = 10}.
 #'
 #' @param origin
-#' Only relevant for simulated data, i.e., if \code{data} is \code{NA}. 
+#' Only relevant for simulated data, i.e., if the \code{data} control is 
+#' \code{NA}. 
 #'
 #' In this case, a \code{logical}. If \code{origin = TRUE} the optimization is 
 #' initialized at the true parameter values. 
@@ -236,13 +238,13 @@
 #' A positive \code{numeric} value, specifying the gradient tolerance, passed on 
 #' to \code{\link[stats]{nlm}}.
 #'
-#' By default, \code{gradtol = 1e-6}.
+#' By default, \code{gradtol = 0.01}.
 #'
 #' @param iterlim
 #' A positive \code{integer} value, specifying the iteration limit, passed on 
 #' to \code{\link[stats]{nlm}}.
 #'
-#' By default, \code{iterlim = 200}. 
+#' By default, \code{iterlim = 100}. 
 #'
 #' @param print.level
 #' One of \code{0}, \code{1}, and \code{2} to control the verbosity of the 
@@ -254,7 +256,7 @@
 #' A positive \code{numeric} value, specifying the step tolerance, passed on 
 #' to \code{\link[stats]{nlm}}.
 #'
-#' By default, \code{gradtol = 1e-6}.
+#' By default, \code{gradtol = 0.01}.
 #' 
 #' @param x,object
 #' An object of class \code{fHMM_controls}.
@@ -324,13 +326,13 @@ set_controls <- function(
     logreturns = if (!hierarchy) FALSE else c(FALSE, FALSE), 
     merge = function(x) mean(x),
     fit = list(),
-    runs = 100, 
+    runs = 10, 
     origin = FALSE, 
     accept = 1:3, 
-    gradtol = 1e-6, 
-    iterlim = 200,
+    gradtol = 0.01, 
+    iterlim = 100,
     print.level = 0, 
-    steptol = 1e-6
+    steptol = 0.01
 ) {
   
   ### check that input 'controls' is a 'list'
@@ -383,7 +385,9 @@ set_controls <- function(
     }
   }
   if (is.list(data)) {
-    redundant_data_controls <- setdiff(names(data), data_controls)
+    redundant_data_controls <- setdiff(
+      names(data), c(data_controls, "data_inside")
+    )
     if (length(redundant_data_controls) > 0) {
       warning(
         "The following element(s) in 'data' are ignored, did you misspll?\n", 

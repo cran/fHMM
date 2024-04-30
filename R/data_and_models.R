@@ -29,8 +29,8 @@
 #'   \item \code{Volume}: Trade volume.
 #' }
 #' 
-#' @source 
-#' <https://finance.yahoo.com/quote/%5EGSPC>
+# #' @source 
+# #' <https://finance.yahoo.com/quote/%5EGSPC>
 #' 
 #' @keywords data
 "spx"
@@ -65,8 +65,8 @@
 #'   \item \code{Volume}: Trade volume.
 #' }
 #' 
-#' @source 
-#' <https://finance.yahoo.com/quote/%5EGDAXI>
+# #' @source 
+# #' <https://finance.yahoo.com/quote/%5EGDAXI>
 #' 
 #' @keywords data
 "dax"
@@ -101,8 +101,8 @@
 #'   \item \code{Volume}: Trade volume.
 #' }
 #' 
-#' @source 
-#' <https://finance.yahoo.com/quote/vow3.de>
+# #' @source 
+# #' <https://finance.yahoo.com/quote/VOW3.DE>
 #' 
 #' @keywords data
 "vw"
@@ -142,20 +142,23 @@
 #' The model was estimated via:
 #' \preformatted{
 #' controls <- set_controls(
-#'   states = 2,
-#'   sdds   = "t(df = normal)",
-#'   data   = list(
-#'     file        = dax,
-#'     date_column = "Date",
-#'     data_column = "Close",
-#'     logreturns  = TRUE,
-#'     from        = "2000-01-03",
-#'     to          = "2022-12-31"
-#'   ),
-#'   fit    = list(runs = 100)
+#' states = 2,
+#' sdds   = "normal",
+#' data   = list(
+#'   file        = dax,
+#'   date_column = "Date",
+#'   data_column = "Close",
+#'   logreturns  = TRUE,
+#'   from        = "2000-01-03",
+#'   to          = "2022-12-31"
+#' ),
+#' fit    = list("runs" = 10, "gradtol" = 1e-6, "steptol" = 1e-6)
 #' )
 #' dax_data <- prepare_data(controls)
-#' dax_model_2n <- fit_model(dax_data)
+#' dax_model_2n <- fit_model(dax_data, seed = 1)
+#' dax_model_2n <- decode_states(dax_model_2n)
+#' dax_model_2n <- compute_residuals(dax_model_2n)
+#' summary(dax_model_2n)
 #' }
 #'
 #' @format An object of class \code{\link{fHMM_model}}.
@@ -186,10 +189,18 @@
 #'     from        = "2000-01-03",
 #'     to          = "2022-12-31"
 #'   ),
-#'   fit    = list(runs = 200)
+#'   fit    = list(
+#'     runs        = 100, 
+#'     iterlim     = 300,
+#'     gradtol     = 1e-6,
+#'     steptol     = 1e-6
+#'   )
 #' )
 #' dax_data <- prepare_data(controls)
-#' dax_model_3t <- fit_model(dax_data)
+#' dax_model_3t <- fit_model(dax_data, seed = 1, ncluster = 10)
+#' dax_model_3t <- decode_states(dax_model_3t)
+#' dax_model_3t <- compute_residuals(dax_model_3t)
+#' summary(dax_model_3t)
 #' }
 #'
 #' @format An object of class \code{\link{fHMM_model}}.
@@ -222,11 +233,17 @@
 #'     logreturns = c(TRUE, TRUE)
 #'   ),
 #'   fit       = list(
-#'     runs = 200
+#'     runs       = 200, 
+#'     iterlim    = 300,
+#'     gradtol    = 1e-6,
+#'     steptol    = 1e-6
 #'   )
 #' )
 #' dax_vw_data <- prepare_data(controls)
-#' dax_vw_model <- fit_model(dax_vw_data)
+#' dax_vw_model <- fit_model(dax_vw_data, seed = 1, ncluster = 10)
+#' dax_vw_model <- decode_states(dax_vw_model)
+#' dax_vw_model <- compute_residuals(dax_vw_model)
+#' summary(dax_vw_model)
 #' }
 #'
 #' @format An object of class \code{\link{fHMM_model}}.
@@ -247,25 +264,32 @@
 #' The model was estimated via:
 #' \preformatted{
 #' controls <- set_controls(
-#'   hierarchy = TRUE,
-#'   states    = c(3, 2),
-#'   sdds      = c("t", "t"),
-#'   period    = "m",
-#'   data      = list(
-#'     file       = list(unemp, spx),
-#'     date_column = c("date", "Date"),
-#'     data_column = c("rate_diff", "Close"),
-#'     from       = "1970-01-01",
-#'     to         = "2020-01-01",
-#'     logreturns = c(FALSE, TRUE)
-#'   ),
-#'   fit       = list(
-#'     runs    = 200,
-#'     iterlim = 300
-#'   )
-#' )
+#'  hierarchy = TRUE,
+#'  states    = c(3, 2),
+#'  sdds      = c("t", "t"),
+#'  period    = "m",
+#'  data      = list(
+#'    file        = list(unemp, spx),
+#'    date_column = c("date", "Date"),
+#'    data_column = c("rate_diff", "Close"),
+#'    from        = "1970-01-01",
+#'    to          = "2020-01-01",
+#'    logreturns  = c(FALSE, TRUE)
+#'  ),
+#'  fit       = list(
+#'    runs        = 50, 
+#'    iterlim     = 1000,
+#'    gradtol     = 1e-6,
+#'    steptol     = 1e-6
+#'  )
+#')
 #' unemp_spx_data <- prepare_data(controls)
-#' unemp_spx_model_3_2 <- fit_model(unemp_spx_data)
+#' unemp_spx_model_3_2 <- fit_model(unemp_spx_data, seed = 1, ncluster = 25)
+#' unemp_spx_model_3_2 <- decode_states(unemp_spx_model_3_2)
+#' unemp_spx_model_3_2 <- compute_residuals(unemp_spx_model_3_2)
+#' summary(unemp_spx_model_3_2)
+#' state_order <- matrix(c(3, 2, 1, 2, 2, 2, 1, 1, 1), 3, 3)
+#' unemp_spx_model_3_2 <- reorder_states(unemp_spx_model_3_2, state_order)
 #' }
 #'
 #' @format An object of class \code{\link{fHMM_model}}.
@@ -288,15 +312,19 @@
 #'   states  = 2,
 #'   sdds    = "gamma(mu = 1|2)",
 #'   horizon = 200,
-#'   fit     = list(runs = 50)
+#'   runs    = 10
 #' )
 #' pars <- fHMM_parameters(
-#'   controls = controls, 
+#'   controls = controls,
 #'   Gamma = matrix(c(0.9, 0.2, 0.1, 0.8), nrow = 2),
-#'   sigma = c(0.5, 1)
+#'   sigma = c(0.5, 1),
+#'   seed = 1
 #' )
 #' data_sim <- prepare_data(controls, true_parameters = pars, seed = 1)
 #' sim_model_2gamma <- fit_model(data_sim, seed = 1)
+#' sim_model_2gamma <- decode_states(sim_model_2gamma)
+#' sim_model_2gamma <- compute_residuals(sim_model_2gamma)
+#' summary(sim_model_2gamma)
 #' }
 #'
 #' @format An object of class \code{\link{fHMM_model}}.
@@ -304,28 +332,3 @@
 #' @keywords model
 "sim_model_2gamma"
 
-#' Simulated 4-state HMM with log-normal distributions
-#'
-#' @description
-#' A pre-computed 4-state HMM with state-dependent log-normal distributions
-#' on \code{1000} simulated observations.
-#'
-#' @usage data("sim_model_4lnorm")
-#'
-#' @details
-#' The model was estimated via:
-#' \preformatted{
-#' controls <- set_controls(
-#'   states  = 4,
-#'   sdds    = "lognormal",
-#'   horizon = 1000,
-#'   fit     = list(runs = 50)
-#' )
-#' data_sim <- prepare_data(controls, seed = 1)
-#' sim_model_4lnorm <- fit_model(data_sim, seed = 1)
-#' }
-#'
-#' @format An object of class \code{\link{fHMM_model}}.
-#'
-#' @keywords model
-"sim_model_4lnorm"

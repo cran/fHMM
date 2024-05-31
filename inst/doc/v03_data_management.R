@@ -7,13 +7,10 @@ knitr::opts_chunk$set(
   fig.align = 'center',
   fig.path = "fHMM-"
 )
-
-## ----load fHMM, message = FALSE-----------------------------------------------
 library("fHMM")
 
 ## ----head dax, results = FALSE------------------------------------------------
 system.file("extdata", "dax.csv", package = "fHMM")
-system.file("extdata", "vw.csv", package = "fHMM")
 
 ## ----prepare_data example-----------------------------------------------------
 controls <- list(

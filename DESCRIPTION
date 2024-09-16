@@ -1,7 +1,7 @@
 Package: fHMM
 Type: Package
 Title: Fitting Hidden Markov Models to Financial Data
-Version: 1.4.0
+Version: 1.4.1
 Authors@R: c(
     person(given = "Lennart",
            family = "Oelschl\U00E4ger",
@@ -32,8 +32,9 @@ BugReports: https://github.com/loelschlaeger/fHMM/issues
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 4.0.0)
-Imports: checkmate, cli, foreach, graphics, grDevices, MASS, oeli (>=
-        0.3.0), padr, pracma, progress, Rcpp, stats, utils
+Imports: checkmate, cli, curl, foreach, graphics, grDevices, httr,
+        jsonlite, MASS, oeli (>= 0.3.0), padr, pracma, progress, Rcpp,
+        stats, utils
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: covr, doSNOW, knitr, parallel, rmarkdown, testthat (>=
         3.0.0), tseries
@@ -43,11 +44,11 @@ Config/testthat/edition: 3
 LazyData: true
 LazyDataCompression: xz
 NeedsCompilation: yes
-Packaged: 2024-08-26 16:09:57 UTC; lennart
+Packaged: 2024-09-16 09:45:12 UTC; Lennart Oelschläger
 Author: Lennart Oelschläger [aut, cre]
     (<https://orcid.org/0000-0001-5421-9313>),
   Timo Adam [aut] (<https://orcid.org/0000-0001-9079-3259>),
   Rouven Michels [aut] (<https://orcid.org/0000-0002-5433-6197>)
 Maintainer: Lennart Oelschläger <oelschlaeger.lennart@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-08-26 18:20:09 UTC
+Date/Publication: 2024-09-16 10:00:03 UTC

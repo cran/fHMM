@@ -1,7 +1,7 @@
 Package: fHMM
 Type: Package
 Title: Fitting Hidden Markov Models to Financial Data
-Version: 1.4.2
+Version: 1.4.3
 Authors@R: c(
     person(given = "Lennart",
            family = "Oelschl\U00E4ger",
@@ -11,12 +11,12 @@ Authors@R: c(
     person(given = "Timo", 
            family = "Adam", 
            role = "aut",
-           email = "ta59@st-andrews.ac.uk",
+           email = "timo.adam@uni-bielefeld.de",
            comment = c(ORCID = "0000-0001-9079-3259")),
     person(given = "Rouven", 
            family = "Michels",
            role = "aut",
-           email = "r.michels@uni-bielefeld.de",
+           email = "rouven.michels@tu-dortmund.de",
            comment = c(ORCID = "0000-0002-5433-6197")))
 Description: Fitting (hierarchical) hidden Markov models to financial data
     via maximum likelihood estimation. See Oelschläger, L. and Adam, T.
@@ -33,22 +33,22 @@ License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 4.0.0)
 Imports: checkmate, cli, curl, foreach, graphics, grDevices, httr,
-        jsonlite, MASS, oeli (>= 0.3.0), padr, pracma, progress, Rcpp,
+        jsonlite, MASS, oeli (>= 0.7.6), padr, pracma, progress, Rcpp,
         stats, utils
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: covr, devtools, doSNOW, knitr, parallel, rmarkdown, testthat
         (>= 3.0.0), tseries
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true
 LazyDataCompression: xz
 NeedsCompilation: yes
-Packaged: 2025-03-23 13:16:05 UTC; lennart
-Author: Lennart Oelschläger [aut, cre]
-    (<https://orcid.org/0000-0001-5421-9313>),
-  Timo Adam [aut] (<https://orcid.org/0000-0001-9079-3259>),
-  Rouven Michels [aut] (<https://orcid.org/0000-0002-5433-6197>)
+Packaged: 2026-05-05 12:39:25 UTC; Lennart Oelschläger
+Author: Lennart Oelschläger [aut, cre] (ORCID:
+    <https://orcid.org/0000-0001-5421-9313>),
+  Timo Adam [aut] (ORCID: <https://orcid.org/0000-0001-9079-3259>),
+  Rouven Michels [aut] (ORCID: <https://orcid.org/0000-0002-5433-6197>)
 Maintainer: Lennart Oelschläger <oelschlaeger.lennart@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-03-24 01:00:01 UTC
+Date/Publication: 2026-05-05 14:12:27 UTC

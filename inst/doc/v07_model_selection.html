@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -396,7 +397,7 @@ neglected in the model formulation. Additional states may be able to
 capture this structure, which can lead to an increased goodness of fit
 that outweighs the higher model complexity. However, as models with too
 many states are difficult to interpret and are therefore often not
-desired, information criteria should be treaten with some caution and
+desired, information criteria should be treated with some caution and
 only considered as a rough guidance. For an in-depth discussion of
 pitfalls, practical challenges, and pragmatic solutions regarding model
 selection, see <span class="citation">Pohle et al. (<a href="#ref-poh17">2017</a>)</span>.</p>
@@ -433,8 +434,8 @@ Agricultural, Biological and Environmental Statistics</em> 22 (3):
 <div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
-<li id="fn1"><p>This vignette was build using R 4.4.2 with the
-<code>{fHMM}</code> 1.4.2 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>This vignette was built using R 4.5.2 with the
+<code>{fHMM}</code> 1.4.3 package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
